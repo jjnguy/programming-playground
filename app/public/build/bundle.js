@@ -434,18 +434,18 @@ var app = (function () {
     			t2 = space();
     			section1 = element("section");
     			textarea = element("textarea");
-    			add_location(h1, file, 88, 0, 2687);
+    			add_location(h1, file, 95, 0, 2920);
     			attr_dev(canvas_1, "width", "500");
     			attr_dev(canvas_1, "height", "500");
     			attr_dev(canvas_1, "id", "canvas");
     			attr_dev(canvas_1, "class", "svelte-xt055");
-    			add_location(canvas_1, file, 91, 4, 2742);
-    			add_location(section0, file, 90, 2, 2728);
+    			add_location(canvas_1, file, 98, 4, 2975);
+    			add_location(section0, file, 97, 2, 2961);
     			attr_dev(textarea, "class", "svelte-xt055");
-    			add_location(textarea, file, 94, 4, 2838);
-    			add_location(section1, file, 93, 2, 2824);
+    			add_location(textarea, file, 101, 4, 3071);
+    			add_location(section1, file, 100, 2, 3057);
     			attr_dev(main, "class", "svelte-xt055");
-    			add_location(main, file, 89, 0, 2719);
+    			add_location(main, file, 96, 0, 2952);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -528,6 +528,8 @@ var app = (function () {
     				currentHeading = result.currentHeading;
     				currentPoint = result.currentPoint;
     			}
+    		} else if (step.type == "emoji") {
+    			ctx.fillText(step.value, currentPoint.x, currentPoint.y);
     		}
     	});
 
@@ -551,7 +553,11 @@ var app = (function () {
     			{
     				type: "repeat",
     				times: 80,
-    				steps: [{ type: "draw", value: 18 }, { type: "rotate", value: 5 }]
+    				steps: [
+    					{ type: "draw", value: 18 },
+    					{ type: "rotate", value: 5 },
+    					{ type: "emoji", value: "😊" }
+    				]
     			}
     		]
     	};

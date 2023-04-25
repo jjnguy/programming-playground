@@ -27,6 +27,10 @@
             type: "rotate",
             value: 5,
           },
+          {
+            type: "emoji",
+            value: "😊",
+          },
         ],
       },
     ],
@@ -71,6 +75,8 @@
           currentHeading = result.currentHeading;
           currentPoint = result.currentPoint;
         }
+      } else if (step.type == "emoji") {
+        ctx.fillText(step.value, currentPoint.x, currentPoint.y);
       }
     });
 
