@@ -35,10 +35,6 @@
 
   let codeText = JSON.stringify(code, null, "  ");
 
-  afterUpdate(() => {
-    console.log(new Date());
-  });
-
   function evaluateCode(ctx, currentPoint, currentHeading, steps) {
     steps.forEach((step) => {
       if (step.type == "draw") {
@@ -46,7 +42,6 @@
           x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
           y: currentPoint.y + Math.sin(degToRad(currentHeading)) * step.value,
         };
-        console.log(nextPoint);
         ctx.beginPath();
         ctx.moveTo(currentPoint.x, currentPoint.y);
         ctx.lineTo(nextPoint.x, nextPoint.y);
@@ -57,7 +52,6 @@
           x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
           y: currentPoint.y + Math.sin(degToRad(currentHeading)) * step.value,
         };
-        console.log(nextPoint);
         ctx.beginPath();
         ctx.moveTo(currentPoint.x, currentPoint.y);
         ctx.moveTo(nextPoint.x, nextPoint.y);
