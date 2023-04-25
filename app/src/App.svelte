@@ -4,16 +4,18 @@
   let code = {
     steps: [
       {
-        type: "move",
-        value: 10,
-      },
-      {
-        type: "rotate",
-        value: 90,
-      },
-      {
-        type: "move",
-        value: 10,
+        type: "repeat",
+        times: 80,
+        steps: [
+          {
+            type: "move",
+            value: 10,
+          },
+          {
+            type: "rotate",
+            value: 5,
+          },
+        ],
       },
     ],
   };
@@ -25,16 +27,8 @@
     console.log(new Date());
   });
 
-  function evaluateCode() {
-    let ctx = canvas.getContext("2d");
-    let currentPoint = { x: canvas.width / 2, y: canvas.height / 2 };
-    let currentHeading = 0;
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(currentPoint.x, currentPoint.y);
-    ctx.stroke();
-    code.steps.forEach((step) => {
+  function evaluateCode(ctx, currentPoint, currentHeading, steps) {
+    steps.forEach((step) => {
       if (step.type == "move") {
         let nextPoint = {
           x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
@@ -49,12 +43,33 @@
       } else if (step.type == "rotate") {
         currentHeading += step.value;
         currentHeading %= 360;
+      } else if (step.type == "repeat") {
+        for (let i = 0; i < step.times; i++) {
+          let result = evaluateCode(
+            ctx,
+            currentPoint,
+            currentHeading,
+            step.steps
+          );
+          currentHeading = result.currentHeading;
+          currentPoint = result.currentPoint;
+        }
       }
     });
+
+    return {
+      currentHeading,
+      currentPoint,
+    };
   }
 
   onMount(() => {
-    evaluateCode();
+    let ctx = canvas.getContext("2d");
+    let currentPoint = { x: canvas.width / 2, y: canvas.height / 2 };
+    let currentHeading = 0;
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    evaluateCode(ctx, currentPoint, currentHeading, code.steps);
   });
 
   function degToRad(degrees) {

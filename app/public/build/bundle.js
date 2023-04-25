@@ -442,18 +442,18 @@ var app = (function () {
     			t2 = space();
     			section1 = element("section");
     			textarea = element("textarea");
-    			add_location(h1, file, 59, 0, 1594);
+    			add_location(h1, file, 69, 0, 2079);
     			attr_dev(canvas_1, "width", "500");
     			attr_dev(canvas_1, "height", "500");
     			attr_dev(canvas_1, "id", "canvas");
     			attr_dev(canvas_1, "class", "svelte-xt055");
-    			add_location(canvas_1, file, 62, 4, 1649);
-    			add_location(section0, file, 61, 2, 1635);
+    			add_location(canvas_1, file, 72, 4, 2134);
+    			add_location(section0, file, 71, 2, 2120);
     			attr_dev(textarea, "class", "svelte-xt055");
-    			add_location(textarea, file, 65, 4, 1745);
-    			add_location(section1, file, 64, 2, 1731);
+    			add_location(textarea, file, 75, 4, 2230);
+    			add_location(section1, file, 74, 2, 2216);
     			attr_dev(main, "class", "svelte-xt055");
-    			add_location(main, file, 60, 0, 1626);
+    			add_location(main, file, 70, 0, 2111);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -503,6 +503,35 @@ var app = (function () {
     	return block;
     }
 
+    function evaluateCode(ctx, currentPoint, currentHeading, steps) {
+    	steps.forEach(step => {
+    		if (step.type == "move") {
+    			let nextPoint = {
+    				x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
+    				y: currentPoint.y + Math.sin(degToRad(currentHeading)) * step.value
+    			};
+
+    			console.log(nextPoint);
+    			ctx.beginPath();
+    			ctx.moveTo(currentPoint.x, currentPoint.y);
+    			ctx.lineTo(nextPoint.x, nextPoint.y);
+    			ctx.stroke();
+    			currentPoint = nextPoint;
+    		} else if (step.type == "rotate") {
+    			currentHeading += step.value;
+    			currentHeading %= 360;
+    		} else if (step.type == "repeat") {
+    			for (let i = 0; i < step.times; i++) {
+    				let result = evaluateCode(ctx, currentPoint, currentHeading, step.steps);
+    				currentHeading = result.currentHeading;
+    				currentPoint = result.currentPoint;
+    			}
+    		}
+    	});
+
+    	return { currentHeading, currentPoint };
+    }
+
     function degToRad(degrees) {
     	var pi = Math.PI;
     	return degrees * (pi / 180);
@@ -514,9 +543,11 @@ var app = (function () {
 
     	let code = {
     		steps: [
-    			{ type: "move", value: 10 },
-    			{ type: "rotate", value: 90 },
-    			{ type: "move", value: 10 }
+    			{
+    				type: "repeat",
+    				times: 80,
+    				steps: [{ type: "move", value: 10 }, { type: "rotate", value: 5 }]
+    			}
     		]
     	};
 
@@ -527,7 +558,7 @@ var app = (function () {
     		console.log(new Date());
     	});
 
-    	function evaluateCode() {
+    	onMount(() => {
     		let ctx = canvas.getContext("2d");
 
     		let currentPoint = {
@@ -537,33 +568,8 @@ var app = (function () {
 
     		let currentHeading = 0;
     		ctx.strokeStyle = "black";
-    		ctx.lineWidth = 2;
-    		ctx.beginPath();
-    		ctx.moveTo(currentPoint.x, currentPoint.y);
-    		ctx.stroke();
-
-    		code.steps.forEach(step => {
-    			if (step.type == "move") {
-    				let nextPoint = {
-    					x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
-    					y: currentPoint.y + Math.sin(degToRad(currentHeading)) * step.value
-    				};
-
-    				console.log(nextPoint);
-    				ctx.beginPath();
-    				ctx.moveTo(currentPoint.x, currentPoint.y);
-    				ctx.lineTo(nextPoint.x, nextPoint.y);
-    				ctx.stroke();
-    				currentPoint = nextPoint;
-    			} else if (step.type == "rotate") {
-    				currentHeading += step.value;
-    				currentHeading %= 360;
-    			}
-    		});
-    	}
-
-    	onMount(() => {
-    		evaluateCode();
+    		ctx.lineWidth = 1;
+    		evaluateCode(ctx, currentPoint, currentHeading, code.steps);
     	});
 
     	const writable_props = [];
