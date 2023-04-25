@@ -4,12 +4,24 @@
   let code = {
     steps: [
       {
+        type: "move",
+        value: 200,
+      },
+      {
+        type: "rotate",
+        value: 90,
+      },
+      {
+        type: "move",
+        value: -20,
+      },
+      {
         type: "repeat",
         times: 80,
         steps: [
           {
-            type: "move",
-            value: 10,
+            type: "draw",
+            value: 18,
           },
           {
             type: "rotate",
@@ -29,7 +41,7 @@
 
   function evaluateCode(ctx, currentPoint, currentHeading, steps) {
     steps.forEach((step) => {
-      if (step.type == "move") {
+      if (step.type == "draw") {
         let nextPoint = {
           x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
           y: currentPoint.y + Math.sin(degToRad(currentHeading)) * step.value,
@@ -38,6 +50,17 @@
         ctx.beginPath();
         ctx.moveTo(currentPoint.x, currentPoint.y);
         ctx.lineTo(nextPoint.x, nextPoint.y);
+        ctx.stroke();
+        currentPoint = nextPoint;
+      } else if (step.type == "move") {
+        let nextPoint = {
+          x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
+          y: currentPoint.y + Math.sin(degToRad(currentHeading)) * step.value,
+        };
+        console.log(nextPoint);
+        ctx.beginPath();
+        ctx.moveTo(currentPoint.x, currentPoint.y);
+        ctx.moveTo(nextPoint.x, nextPoint.y);
         ctx.stroke();
         currentPoint = nextPoint;
       } else if (step.type == "rotate") {

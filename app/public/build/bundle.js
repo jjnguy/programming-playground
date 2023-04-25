@@ -442,18 +442,18 @@ var app = (function () {
     			t2 = space();
     			section1 = element("section");
     			textarea = element("textarea");
-    			add_location(h1, file, 69, 0, 2079);
+    			add_location(h1, file, 93, 0, 2817);
     			attr_dev(canvas_1, "width", "500");
     			attr_dev(canvas_1, "height", "500");
     			attr_dev(canvas_1, "id", "canvas");
     			attr_dev(canvas_1, "class", "svelte-xt055");
-    			add_location(canvas_1, file, 72, 4, 2134);
-    			add_location(section0, file, 71, 2, 2120);
+    			add_location(canvas_1, file, 96, 4, 2872);
+    			add_location(section0, file, 95, 2, 2858);
     			attr_dev(textarea, "class", "svelte-xt055");
-    			add_location(textarea, file, 75, 4, 2230);
-    			add_location(section1, file, 74, 2, 2216);
+    			add_location(textarea, file, 99, 4, 2968);
+    			add_location(section1, file, 98, 2, 2954);
     			attr_dev(main, "class", "svelte-xt055");
-    			add_location(main, file, 70, 0, 2111);
+    			add_location(main, file, 94, 0, 2849);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -505,7 +505,7 @@ var app = (function () {
 
     function evaluateCode(ctx, currentPoint, currentHeading, steps) {
     	steps.forEach(step => {
-    		if (step.type == "move") {
+    		if (step.type == "draw") {
     			let nextPoint = {
     				x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
     				y: currentPoint.y + Math.sin(degToRad(currentHeading)) * step.value
@@ -515,6 +515,18 @@ var app = (function () {
     			ctx.beginPath();
     			ctx.moveTo(currentPoint.x, currentPoint.y);
     			ctx.lineTo(nextPoint.x, nextPoint.y);
+    			ctx.stroke();
+    			currentPoint = nextPoint;
+    		} else if (step.type == "move") {
+    			let nextPoint = {
+    				x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
+    				y: currentPoint.y + Math.sin(degToRad(currentHeading)) * step.value
+    			};
+
+    			console.log(nextPoint);
+    			ctx.beginPath();
+    			ctx.moveTo(currentPoint.x, currentPoint.y);
+    			ctx.moveTo(nextPoint.x, nextPoint.y);
     			ctx.stroke();
     			currentPoint = nextPoint;
     		} else if (step.type == "rotate") {
@@ -543,10 +555,13 @@ var app = (function () {
 
     	let code = {
     		steps: [
+    			{ type: "move", value: 200 },
+    			{ type: "rotate", value: 90 },
+    			{ type: "move", value: -20 },
     			{
     				type: "repeat",
     				times: 80,
-    				steps: [{ type: "move", value: 10 }, { type: "rotate", value: 5 }]
+    				steps: [{ type: "draw", value: 18 }, { type: "rotate", value: 5 }]
     			}
     		]
     	};
