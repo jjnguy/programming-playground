@@ -1,7 +1,9 @@
 <script lang="ts">
   import { afterUpdate, onMount } from "svelte";
+  import CodeBuilder from "./components/CodeBuilder.svelte";
+  import type { Code } from "./types";
 
-  let code = {
+  let code: Code = {
     steps: [
       {
         type: "move",
@@ -28,7 +30,7 @@
             value: 5,
           },
           {
-            type: "emoji",
+            type: "text",
             value: "😊",
           },
         ],
@@ -36,8 +38,6 @@
     ],
   };
   let canvas: HTMLCanvasElement;
-
-  let codeText = JSON.stringify(code, null, "  ");
 
   function evaluateCode(ctx, currentPoint, currentHeading, steps) {
     steps.forEach((step) => {
@@ -75,8 +75,16 @@
           currentHeading = result.currentHeading;
           currentPoint = result.currentPoint;
         }
-      } else if (step.type == "emoji") {
-        ctx.fillText(step.value, currentPoint.x, currentPoint.y);
+      } else if (step.type == "text") {
+        let measurement = ctx.measureText(step.value);
+        let actualHeight =
+          measurement.actualBoundingBoxAscent +
+          measurement.actualBoundingBoxDescent;
+        ctx.fillText(
+          step.value,
+          currentPoint.x - measurement.width / 2,
+          currentPoint.y + actualHeight / 2
+        );
       }
     });
 
@@ -92,6 +100,17 @@
     let currentHeading = 0;
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1;
+    ctx.clearRect(0, 0, 500, 500);
+    evaluateCode(ctx, currentPoint, currentHeading, code.steps);
+  });
+
+  afterUpdate(() => {
+    let ctx = canvas.getContext("2d");
+    let currentPoint = { x: canvas.width / 2, y: canvas.height / 2 };
+    let currentHeading = 0;
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.clearRect(0, 0, 500, 500);
     evaluateCode(ctx, currentPoint, currentHeading, code.steps);
   });
 
@@ -107,7 +126,7 @@
     <canvas width="500" height="500" bind:this={canvas} id="canvas" />
   </section>
   <section>
-    <textarea bind:value={codeText} />
+    <CodeBuilder bind:steps={code.steps} />
   </section>
 </main>
 
