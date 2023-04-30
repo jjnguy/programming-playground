@@ -3,13 +3,19 @@ export type Code = {
   steps: Array<Step>
 }
 
-export type SimpleStepTypes = "draw" | "move" | "rotate" | "text";
+export type TextStepTypes = "text";
+export type NumberStepTypes = "draw" | "move" | "rotate";
 
-export type Step = SimpleStep | RepeatStep;
+export type Step = NumberStep | TextStep | RepeatStep;
 
-export type SimpleStep = {
-  type: SimpleStepTypes
-  value: number | string
+export type NumberStep = {
+  type: NumberStepTypes
+  value: number
+}
+
+export type TextStep = {
+  type: TextStepTypes
+  value: string
 }
 
 export type RepeatStepType = "repeat";

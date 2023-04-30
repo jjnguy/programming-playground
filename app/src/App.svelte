@@ -3,40 +3,44 @@
   import CodeBuilder from "./components/CodeBuilder.svelte";
   import type { Code } from "./types";
 
-  let code: Code = {
-    steps: [
-      {
-        type: "move",
-        value: 200,
-      },
-      {
-        type: "rotate",
-        value: 90,
-      },
-      {
-        type: "move",
-        value: -20,
-      },
-      {
-        type: "repeat",
-        times: 80,
+  let savedCode = localStorage.getItem("prog-playground_code");
+
+  let code: Code = savedCode
+    ? JSON.parse(savedCode)
+    : {
         steps: [
           {
-            type: "draw",
-            value: 18,
+            type: "move",
+            value: 200,
           },
           {
             type: "rotate",
-            value: 5,
+            value: 90,
           },
           {
-            type: "text",
-            value: "😊",
+            type: "move",
+            value: -20,
+          },
+          {
+            type: "repeat",
+            times: 80,
+            steps: [
+              {
+                type: "draw",
+                value: 18,
+              },
+              {
+                type: "rotate",
+                value: 5,
+              },
+              {
+                type: "text",
+                value: "😊",
+              },
+            ],
           },
         ],
-      },
-    ],
-  };
+      };
   let canvas: HTMLCanvasElement;
 
   function evaluateCode(ctx, currentPoint, currentHeading, steps) {
@@ -95,6 +99,12 @@
   }
 
   onMount(() => {
+    if (screen.width < 1000) {
+      canvas.width = canvas.height = screen.width;
+    } else {
+      canvas.width = canvas.height = 500;
+    }
+
     let ctx = canvas.getContext("2d");
     let currentPoint = { x: canvas.width / 2, y: canvas.height / 2 };
     let currentHeading = 0;
@@ -105,6 +115,8 @@
   });
 
   afterUpdate(() => {
+    localStorage.setItem("prog-playground_code", JSON.stringify(code));
+
     let ctx = canvas.getContext("2d");
     let currentPoint = { x: canvas.width / 2, y: canvas.height / 2 };
     let currentHeading = 0;
@@ -120,11 +132,8 @@
   }
 </script>
 
-<h1>Programming Playground</h1>
 <main>
-  <section>
-    <canvas width="500" height="500" bind:this={canvas} id="canvas" />
-  </section>
+  <canvas bind:this={canvas} id="canvas" />
   <section>
     <CodeBuilder bind:steps={code.steps} />
   </section>
@@ -133,19 +142,41 @@
 <style lang="less">
   main {
     display: flex;
-  }
+    flex-wrap: wrap;
+    height: 100vh;
 
-  div {
-    &.deficit {
-      color: red;
+    canvas {
+      z-index: 15;
+      background-color: white;
+      border: 1px solid black;
+    }
+
+    section:last-child {
+      z-index: 0;
     }
   }
-  canvas {
-    border: 1px solid black;
+
+  @media only screen and (max-width: 800px) {
+    canvas {
+      width: 100%;
+      height: 100vw;
+      position: fixed;
+    }
+
+    section:last-child {
+      margin-top: 100vw;
+    }
   }
 
-  textarea {
-    height: 500px;
-    width: 500px;
+  @media only screen and (min-width: 800px) {
+    canvas {
+      width: 500px;
+      height: 500px;
+      position: relative;
+    }
+
+    section:last-child {
+      margin-top: 0;
+    }
   }
 </style>

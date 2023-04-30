@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { RepeatStep, SimpleStep } from "../types";
+  import type { Step } from "../types";
   import CodeBuilder from "./CodeBuilder.svelte";
+  import Stepper from "./Stepper.svelte";
 
-  export let step: SimpleStep | RepeatStep;
+  export let step: Step;
 
   function typeChanged() {
     if (step.type == "repeat" && !step.times) {
@@ -30,9 +31,9 @@
 {#if step.type == "text"}
   <input bind:value={step.value} />
 {:else if step.type != "repeat"}
-  <input bind:value={step.value} type="number" />
+  <Stepper bind:value={step.value} step={0.5} />
 {:else if step.type == "repeat"}
-  <input bind:value={step.times} type="number" min="1" />
+  <Stepper bind:value={step.times} min={1} />
   <div>
     <CodeBuilder bind:steps={step.steps} />
   </div>
