@@ -12,6 +12,11 @@
     TextStepTypes,
   } from "./types";
 
+  type Boundries = {
+    min: Point;
+    max: Point;
+  };
+
   type StepExecutorCollection = Map<
     TextStepTypes | NumberStepTypes | RepeatStepType,
     StepExecutor
@@ -20,7 +25,7 @@
   type StepExecutor = (
     Step,
     DrawingState,
-    CanvasRenderingContext2D
+    CanvasRenderingContext2D?
   ) => DrawingState;
 
   type Point = {
@@ -31,6 +36,7 @@
   type DrawingState = {
     heading: number;
     point: Point;
+    boundries: Boundries;
   };
 
   let stepExecutors: StepExecutorCollection = new Map<
@@ -43,17 +49,19 @@
     (
       step: TextStep,
       currentState: DrawingState,
-      ctx: CanvasRenderingContext2D
+      ctx?: CanvasRenderingContext2D
     ): DrawingState => {
-      let measurement = ctx.measureText(step.value);
-      let actualHeight =
-        measurement.actualBoundingBoxAscent +
-        measurement.actualBoundingBoxDescent;
-      ctx.fillText(
-        step.value,
-        currentState.point.x - measurement.width / 2,
-        currentState.point.y + actualHeight / 2
-      );
+      if (ctx) {
+        let measurement = ctx.measureText(step.value);
+        let actualHeight =
+          measurement.actualBoundingBoxAscent +
+          measurement.actualBoundingBoxDescent;
+        ctx.fillText(
+          step.value,
+          currentState.point.x - measurement.width / 2,
+          currentState.point.y + actualHeight / 2
+        );
+      }
       return { ...currentState };
     }
   );
@@ -63,7 +71,7 @@
     (
       step: NumberStep,
       currentState: DrawingState,
-      ctx: CanvasRenderingContext2D
+      ctx?: CanvasRenderingContext2D
     ): DrawingState => {
       let nextPoint = {
         x:
@@ -73,11 +81,26 @@
           currentState.point.y +
           Math.sin(degToRad(currentState.heading)) * step.value,
       };
-      ctx.beginPath();
-      ctx.moveTo(currentState.point.x, currentState.point.y);
-      ctx.moveTo(nextPoint.x, nextPoint.y);
-      ctx.stroke();
-      return { ...currentState, point: nextPoint };
+      if (ctx) {
+        ctx.beginPath();
+        ctx.moveTo(currentState.point.x, currentState.point.y);
+        ctx.moveTo(nextPoint.x, nextPoint.y);
+        ctx.stroke();
+      }
+      return {
+        ...currentState,
+        point: nextPoint,
+        boundries: {
+          min: {
+            x: Math.min(currentState.boundries.min.x, nextPoint.x),
+            y: Math.min(currentState.boundries.min.y, nextPoint.y),
+          },
+          max: {
+            x: Math.max(currentState.boundries.max.x, nextPoint.x),
+            y: Math.max(currentState.boundries.max.y, nextPoint.y),
+          },
+        },
+      };
     }
   );
 
@@ -86,7 +109,7 @@
     (
       step: NumberStep,
       currentState: DrawingState,
-      ctx: CanvasRenderingContext2D
+      ctx?: CanvasRenderingContext2D
     ): DrawingState => {
       let nextPoint = {
         x:
@@ -96,11 +119,26 @@
           currentState.point.y +
           Math.sin(degToRad(currentState.heading)) * step.value,
       };
-      ctx.beginPath();
-      ctx.moveTo(currentState.point.x, currentState.point.y);
-      ctx.lineTo(nextPoint.x, nextPoint.y);
-      ctx.stroke();
-      return { ...currentState, point: nextPoint };
+      if (ctx) {
+        ctx.beginPath();
+        ctx.moveTo(currentState.point.x, currentState.point.y);
+        ctx.lineTo(nextPoint.x, nextPoint.y);
+        ctx.stroke();
+      }
+      return {
+        ...currentState,
+        point: nextPoint,
+        boundries: {
+          min: {
+            x: Math.min(currentState.boundries.min.x, nextPoint.x),
+            y: Math.min(currentState.boundries.min.y, nextPoint.y),
+          },
+          max: {
+            x: Math.max(currentState.boundries.max.x, nextPoint.x),
+            y: Math.max(currentState.boundries.max.y, nextPoint.y),
+          },
+        },
+      };
     }
   );
 
@@ -109,7 +147,7 @@
     (
       step: NumberStep,
       currentState: DrawingState,
-      ctx: CanvasRenderingContext2D
+      ctx?: CanvasRenderingContext2D
     ): DrawingState => {
       let newHeading = currentState.heading + step.value;
       newHeading %= 360;
@@ -125,11 +163,11 @@
     (
       step: RepeatStep,
       currentState: DrawingState,
-      ctx: CanvasRenderingContext2D
+      ctx?: CanvasRenderingContext2D
     ): DrawingState => {
       let newState = { ...currentState };
       for (let i = 0; i < step.times; i++) {
-        newState = evaluateCode(ctx, newState, step.steps);
+        newState = evaluateCode(ctx, newState, step.steps, false);
       }
 
       return newState;
@@ -176,22 +214,23 @@
       };
   let canvas: HTMLCanvasElement;
 
+  function calculateBoundries(currentState: DrawingState, steps: Array<Step>) {
+    steps.forEach((step: Step) => {
+      currentState = stepExecutors.get(step.type)(step, currentState, null);
+    });
+    return currentState;
+  }
+
   function evaluateCode(
     ctx,
     currentState: DrawingState,
-    steps: Array<Step>
+    steps: Array<Step>,
+    mainLoop: boolean
   ): DrawingState {
-    let boundries = {
-      min: {
-        x: 100000000,
-        y: 100000000,
-      },
-      max: {
-        x: -10000000,
-        y: -10000000,
-      },
-    };
-    // TODO: dry run first to calculate bounds. Then offset based on bounds
+    if (mainLoop) {
+      console.log(currentState.boundries);
+    }
+
     steps.forEach((step: Step) => {
       currentState = stepExecutors.get(step.type)(step, currentState, ctx);
     });
@@ -212,14 +251,25 @@
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1;
     ctx.clearRect(0, 0, 500, 500);
-    evaluateCode(
-      ctx,
-      {
-        point: currentPoint,
-        heading: currentHeading,
+
+    let initialState = {
+      point: currentPoint,
+      heading: currentHeading,
+      boundries: {
+        min: {
+          x: 10000000,
+          y: 10000000,
+        },
+        max: {
+          x: -1000000000,
+          y: -100000000,
+        },
       },
-      code.steps
-    );
+    };
+
+    let finalState = calculateBoundries(initialState, code.steps);
+    console.log(finalState.boundries);
+    evaluateCode(ctx, initialState, code.steps, false);
   });
 
   afterUpdate(() => {
@@ -236,8 +286,19 @@
       {
         point: currentPoint,
         heading: currentHeading,
+        boundries: {
+          min: {
+            x: 10000000,
+            y: 10000000,
+          },
+          max: {
+            x: -1000000000,
+            y: -100000000,
+          },
+        },
       },
-      code.steps
+      code.steps,
+      false
     );
   });
 
