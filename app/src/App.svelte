@@ -1,7 +1,140 @@
 <script lang="ts">
   import { afterUpdate, onMount } from "svelte";
   import CodeBuilder from "./components/CodeBuilder.svelte";
-  import type { Code } from "./types";
+  import type {
+    Code,
+    NumberStep,
+    NumberStepTypes,
+    RepeatStep,
+    RepeatStepType,
+    Step,
+    TextStep,
+    TextStepTypes,
+  } from "./types";
+
+  type StepExecutorCollection = Map<
+    TextStepTypes | NumberStepTypes | RepeatStepType,
+    StepExecutor
+  >;
+
+  type StepExecutor = (
+    Step,
+    DrawingState,
+    CanvasRenderingContext2D
+  ) => DrawingState;
+
+  type Point = {
+    x: number;
+    y: number;
+  };
+
+  type DrawingState = {
+    heading: number;
+    point: Point;
+  };
+
+  let stepExecutors: StepExecutorCollection = new Map<
+    TextStepTypes | NumberStepTypes | RepeatStepType,
+    StepExecutor
+  >();
+
+  stepExecutors.set(
+    "text",
+    (
+      step: TextStep,
+      currentState: DrawingState,
+      ctx: CanvasRenderingContext2D
+    ): DrawingState => {
+      let measurement = ctx.measureText(step.value);
+      let actualHeight =
+        measurement.actualBoundingBoxAscent +
+        measurement.actualBoundingBoxDescent;
+      ctx.fillText(
+        step.value,
+        currentState.point.x - measurement.width / 2,
+        currentState.point.y + actualHeight / 2
+      );
+      return { ...currentState };
+    }
+  );
+
+  stepExecutors.set(
+    "move",
+    (
+      step: NumberStep,
+      currentState: DrawingState,
+      ctx: CanvasRenderingContext2D
+    ): DrawingState => {
+      let nextPoint = {
+        x:
+          currentState.point.x +
+          Math.cos(degToRad(currentState.heading)) * step.value,
+        y:
+          currentState.point.y +
+          Math.sin(degToRad(currentState.heading)) * step.value,
+      };
+      ctx.beginPath();
+      ctx.moveTo(currentState.point.x, currentState.point.y);
+      ctx.moveTo(nextPoint.x, nextPoint.y);
+      ctx.stroke();
+      return { ...currentState, point: nextPoint };
+    }
+  );
+
+  stepExecutors.set(
+    "draw",
+    (
+      step: NumberStep,
+      currentState: DrawingState,
+      ctx: CanvasRenderingContext2D
+    ): DrawingState => {
+      let nextPoint = {
+        x:
+          currentState.point.x +
+          Math.cos(degToRad(currentState.heading)) * step.value,
+        y:
+          currentState.point.y +
+          Math.sin(degToRad(currentState.heading)) * step.value,
+      };
+      ctx.beginPath();
+      ctx.moveTo(currentState.point.x, currentState.point.y);
+      ctx.lineTo(nextPoint.x, nextPoint.y);
+      ctx.stroke();
+      return { ...currentState, point: nextPoint };
+    }
+  );
+
+  stepExecutors.set(
+    "rotate",
+    (
+      step: NumberStep,
+      currentState: DrawingState,
+      ctx: CanvasRenderingContext2D
+    ): DrawingState => {
+      let newHeading = currentState.heading + step.value;
+      newHeading %= 360;
+      return {
+        ...currentState,
+        heading: newHeading,
+      };
+    }
+  );
+
+  stepExecutors.set(
+    "repeat",
+    (
+      step: RepeatStep,
+      currentState: DrawingState,
+      ctx: CanvasRenderingContext2D
+    ): DrawingState => {
+      let newState = { ...currentState };
+      for (let i = 0; i < step.times; i++) {
+        newState = evaluateCode(ctx, newState, step.steps);
+      }
+
+      return newState;
+    }
+  );
 
   let savedCode = localStorage.getItem("prog-playground_code");
 
@@ -43,59 +176,27 @@
       };
   let canvas: HTMLCanvasElement;
 
-  function evaluateCode(ctx, currentPoint, currentHeading, steps) {
-    steps.forEach((step) => {
-      if (step.type == "draw") {
-        let nextPoint = {
-          x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
-          y: currentPoint.y + Math.sin(degToRad(currentHeading)) * step.value,
-        };
-        ctx.beginPath();
-        ctx.moveTo(currentPoint.x, currentPoint.y);
-        ctx.lineTo(nextPoint.x, nextPoint.y);
-        ctx.stroke();
-        currentPoint = nextPoint;
-      } else if (step.type == "move") {
-        let nextPoint = {
-          x: currentPoint.x + Math.cos(degToRad(currentHeading)) * step.value,
-          y: currentPoint.y + Math.sin(degToRad(currentHeading)) * step.value,
-        };
-        ctx.beginPath();
-        ctx.moveTo(currentPoint.x, currentPoint.y);
-        ctx.moveTo(nextPoint.x, nextPoint.y);
-        ctx.stroke();
-        currentPoint = nextPoint;
-      } else if (step.type == "rotate") {
-        currentHeading += step.value;
-        currentHeading %= 360;
-      } else if (step.type == "repeat") {
-        for (let i = 0; i < step.times; i++) {
-          let result = evaluateCode(
-            ctx,
-            currentPoint,
-            currentHeading,
-            step.steps
-          );
-          currentHeading = result.currentHeading;
-          currentPoint = result.currentPoint;
-        }
-      } else if (step.type == "text") {
-        let measurement = ctx.measureText(step.value);
-        let actualHeight =
-          measurement.actualBoundingBoxAscent +
-          measurement.actualBoundingBoxDescent;
-        ctx.fillText(
-          step.value,
-          currentPoint.x - measurement.width / 2,
-          currentPoint.y + actualHeight / 2
-        );
-      }
+  function evaluateCode(
+    ctx,
+    currentState: DrawingState,
+    steps: Array<Step>
+  ): DrawingState {
+    let boundries = {
+      min: {
+        x: 100000000,
+        y: 100000000,
+      },
+      max: {
+        x: -10000000,
+        y: -10000000,
+      },
+    };
+    // TODO: dry run first to calculate bounds. Then offset based on bounds
+    steps.forEach((step: Step) => {
+      currentState = stepExecutors.get(step.type)(step, currentState, ctx);
     });
 
-    return {
-      currentHeading,
-      currentPoint,
-    };
+    return currentState;
   }
 
   onMount(() => {
@@ -111,7 +212,14 @@
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1;
     ctx.clearRect(0, 0, 500, 500);
-    evaluateCode(ctx, currentPoint, currentHeading, code.steps);
+    evaluateCode(
+      ctx,
+      {
+        point: currentPoint,
+        heading: currentHeading,
+      },
+      code.steps
+    );
   });
 
   afterUpdate(() => {
@@ -123,7 +231,14 @@
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1;
     ctx.clearRect(0, 0, 500, 500);
-    evaluateCode(ctx, currentPoint, currentHeading, code.steps);
+    evaluateCode(
+      ctx,
+      {
+        point: currentPoint,
+        heading: currentHeading,
+      },
+      code.steps
+    );
   });
 
   function degToRad(degrees) {
