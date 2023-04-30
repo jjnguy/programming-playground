@@ -1,9 +1,16 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import type { Step } from "../types";
   import CodeBuilder from "./CodeBuilder.svelte";
   import Stepper from "./Stepper.svelte";
 
+  let dispatch = createEventDispatcher();
+
   export let step: Step;
+
+  function requestDeletion() {
+    dispatch("delete");
+  }
 
   function typeChanged() {
     if (step.type == "repeat" && !step.times) {
@@ -12,10 +19,15 @@
         times: 1,
         steps: [],
       };
-    } else if (step.type != "repeat" && !step.value) {
+    } else if (step.type == "text" && !step.value) {
       step = {
         type: step.type,
-        value: step.type == "text" ? "" : 0,
+        value: "",
+      };
+    } else if (step.type != "repeat" && step.type != "text" && !step.value) {
+      step = {
+        type: step.type,
+        value: 0,
       };
     }
   }
@@ -38,6 +50,7 @@
     <CodeBuilder bind:steps={step.steps} />
   </div>
 {/if}
+<button on:click={requestDeletion}>delete</button>
 
 <style lang="less">
   div {

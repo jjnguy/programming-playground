@@ -11,6 +11,11 @@
     });
     steps = steps;
   }
+
+  function del(ix) {
+    steps.splice(ix, 1);
+    steps = steps;
+  }
 </script>
 
 {#if steps}
@@ -20,7 +25,7 @@
         <button on:click={() => insertStep(ix)}>insert step</button>
       </li>
       <li>
-        <StepBuilder bind:step />
+        <StepBuilder on:delete={() => del(ix)} bind:step />
       </li>
     {/each}
     <li>
