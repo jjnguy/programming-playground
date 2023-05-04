@@ -17,6 +17,8 @@
     max: Point;
   };
 
+  type Scale = number;
+
   type StepExecutorCollection = Map<
     TextStepTypes | NumberStepTypes | RepeatStepType,
     StepExecutor
@@ -36,6 +38,7 @@
   type DrawingState = {
     heading: number;
     point: Point;
+    scale: Scale;
     boundries: Boundries;
   };
 
@@ -76,10 +79,14 @@
       let nextPoint = {
         x:
           currentState.point.x +
-          Math.cos(degToRad(currentState.heading)) * step.value,
+          Math.cos(degToRad(currentState.heading)) *
+            step.value *
+            currentState.scale,
         y:
           currentState.point.y +
-          Math.sin(degToRad(currentState.heading)) * step.value,
+          Math.sin(degToRad(currentState.heading)) *
+            step.value *
+            currentState.scale,
       };
       if (ctx) {
         ctx.beginPath();
@@ -114,10 +121,14 @@
       let nextPoint = {
         x:
           currentState.point.x +
-          Math.cos(degToRad(currentState.heading)) * step.value,
+          Math.cos(degToRad(currentState.heading)) *
+            step.value *
+            currentState.scale,
         y:
           currentState.point.y +
-          Math.sin(degToRad(currentState.heading)) * step.value,
+          Math.sin(degToRad(currentState.heading)) *
+            step.value *
+            currentState.scale,
       };
       if (ctx) {
         ctx.beginPath();
@@ -167,7 +178,7 @@
     ): DrawingState => {
       let newState = { ...currentState };
       for (let i = 0; i < step.times; i++) {
-        newState = evaluateCode(ctx, newState, step.steps, false);
+        newState = evaluateCode(ctx, newState, step.steps);
       }
 
       return newState;
@@ -224,13 +235,8 @@
   function evaluateCode(
     ctx,
     currentState: DrawingState,
-    steps: Array<Step>,
-    mainLoop: boolean
+    steps: Array<Step>
   ): DrawingState {
-    if (mainLoop) {
-      console.log(currentState.boundries);
-    }
-
     steps.forEach((step: Step) => {
       currentState = stepExecutors.get(step.type)(step, currentState, ctx);
     });
@@ -246,15 +252,15 @@
     }
 
     let ctx = canvas.getContext("2d");
-    let currentPoint = { x: canvas.width / 2, y: canvas.height / 2 };
-    let currentHeading = 0;
+    let initialPoint = { x: canvas.width / 2, y: canvas.height / 2 };
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1;
     ctx.clearRect(0, 0, 500, 500);
 
-    let initialState = {
-      point: currentPoint,
-      heading: currentHeading,
+    let initialState: DrawingState = {
+      point: { ...initialPoint },
+      heading: 0,
+      scale: 1,
       boundries: {
         min: {
           x: 10000000,
@@ -268,37 +274,94 @@
     };
 
     let finalState = calculateBoundries(initialState, code.steps);
-    console.log(finalState.boundries);
-    evaluateCode(ctx, initialState, code.steps, false);
-  });
 
-  afterUpdate(() => {
-    localStorage.setItem("prog-playground_code", JSON.stringify(code));
+    let scales = {
+      x:
+        canvas.width /
+        (finalState.boundries.max.x - finalState.boundries.min.x),
+      y:
+        canvas.height /
+        (finalState.boundries.max.y - finalState.boundries.min.y),
+    };
 
-    let ctx = canvas.getContext("2d");
-    let currentPoint = { x: canvas.width / 2, y: canvas.height / 2 };
-    let currentHeading = 0;
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
-    ctx.clearRect(0, 0, 500, 500);
+    let scale = Math.min(scales.x, scales.y);
+
+    let xShift = -finalState.boundries.min.x * scale;
+    let yShift = -finalState.boundries.min.y * scale;
+
+    let shiftedPoint = {
+      x: initialPoint.x + xShift,
+      y: initialPoint.y + yShift,
+    };
+
     evaluateCode(
       ctx,
       {
-        point: currentPoint,
-        heading: currentHeading,
-        boundries: {
-          min: {
-            x: 10000000,
-            y: 10000000,
-          },
-          max: {
-            x: -1000000000,
-            y: -100000000,
-          },
+        point: shiftedPoint,
+        heading: 0,
+        scale: scale,
+        boundries: initialState.boundries,
+      },
+      code.steps
+    );
+  });
+
+  afterUpdate(() => {
+    //return;
+    localStorage.setItem("prog-playground_code", JSON.stringify(code));
+
+    let ctx = canvas.getContext("2d");
+    let initialPoint = { x: canvas.width / 2, y: canvas.height / 2 };
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.clearRect(0, 0, 500, 500);
+
+    let initialState: DrawingState = {
+      point: { ...initialPoint },
+      heading: 0,
+      scale: 1,
+      boundries: {
+        min: {
+          x: 10000000,
+          y: 10000000,
+        },
+        max: {
+          x: -1000000000,
+          y: -100000000,
         },
       },
-      code.steps,
-      false
+    };
+
+    let finalState = calculateBoundries(initialState, code.steps);
+
+    let scales = {
+      x:
+        canvas.width /
+        (finalState.boundries.max.x - finalState.boundries.min.x),
+      y:
+        canvas.height /
+        (finalState.boundries.max.y - finalState.boundries.min.y),
+    };
+
+    let scale = Math.min(scales.x, scales.y);
+
+    let xShift = -finalState.boundries.min.x * scale;
+    let yShift = -finalState.boundries.min.y * scale;
+
+    let shiftedPoint = {
+      x: initialPoint.x + xShift,
+      y: initialPoint.y + yShift,
+    };
+
+    evaluateCode(
+      ctx,
+      {
+        point: shiftedPoint,
+        heading: 0,
+        scale: scale,
+        boundries: initialState.boundries,
+      },
+      code.steps
     );
   });
 
