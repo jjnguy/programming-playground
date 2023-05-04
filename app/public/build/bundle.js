@@ -1665,14 +1665,14 @@ var app = (function () {
     			create_component(codebuilder.$$.fragment);
     			attr_dev(canvas_1, "id", "canvas");
     			attr_dev(canvas_1, "class", "svelte-1snv1ja");
-    			add_location(canvas_1, file, 199, 2, 6649);
+    			add_location(canvas_1, file, 180, 2, 5973);
     			attr_dev(input, "type", "checkbox");
-    			add_location(input, file, 202, 19, 6733);
-    			add_location(label, file, 201, 4, 6707);
+    			add_location(input, file, 183, 19, 6057);
+    			add_location(label, file, 182, 4, 6031);
     			attr_dev(section, "class", "svelte-1snv1ja");
-    			add_location(section, file, 200, 2, 6693);
+    			add_location(section, file, 181, 2, 6017);
     			attr_dev(main, "class", "svelte-1snv1ja");
-    			add_location(main, file, 198, 0, 6640);
+    			add_location(main, file, 179, 0, 5964);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1762,8 +1762,8 @@ var app = (function () {
 
     	stepExecutors.set("move", (step, currentState, ctx) => {
     		let nextPoint = {
-    			x: currentState.point.x + Math.cos(degToRad(currentState.heading)) * step.value * currentState.scale,
-    			y: currentState.point.y + Math.sin(degToRad(currentState.heading)) * step.value * currentState.scale
+    			x: currentState.point.x + Math.cos(degToRad(currentState.heading)) * step.value,
+    			y: currentState.point.y + Math.sin(degToRad(currentState.heading)) * step.value
     		};
 
     		if (ctx) {
@@ -1790,8 +1790,8 @@ var app = (function () {
 
     	stepExecutors.set("draw", (step, currentState, ctx) => {
     		let nextPoint = {
-    			x: currentState.point.x + Math.cos(degToRad(currentState.heading)) * step.value * currentState.scale,
-    			y: currentState.point.y + Math.sin(degToRad(currentState.heading)) * step.value * currentState.scale
+    			x: currentState.point.x + Math.cos(degToRad(currentState.heading)) * step.value,
+    			y: currentState.point.y + Math.sin(degToRad(currentState.heading)) * step.value
     		};
 
     		if (ctx) {
@@ -1888,7 +1888,6 @@ var app = (function () {
     		let initialState = {
     			point: Object.assign({}, canvasCenter),
     			heading: 0,
-    			scale: 1,
     			boundries: { min: canvasCenter, max: canvasCenter }
     		};
 
@@ -1898,13 +1897,6 @@ var app = (function () {
     		}
 
     		let finalState = calculateBoundries(initialState, code.steps);
-
-    		let scales = {
-    			x: canvas.width / (finalState.boundries.max.x - finalState.boundries.min.x),
-    			y: canvas.height / (finalState.boundries.max.y - finalState.boundries.min.y)
-    		};
-
-    		let scale = Math.min(scales.x, scales.y);
 
     		let centerOfResult = {
     			x: (finalState.boundries.max.x + finalState.boundries.min.x) / 2,
@@ -1916,12 +1908,9 @@ var app = (function () {
     			y: centerOfResult.y - canvasCenter.y
     		};
 
-    		let xShift = -finalState.boundries.min.x + distanceOffCenter.x * scale / 2;
-    		let yShift = -finalState.boundries.min.y + distanceOffCenter.y * scale / 2;
-
     		let shiftedPoint = {
-    			x: canvasCenter.x + xShift,
-    			y: canvasCenter.y + yShift
+    			x: canvasCenter.x - distanceOffCenter.x,
+    			y: canvasCenter.y - distanceOffCenter.y
     		};
 
     		evaluateCode(
@@ -1929,7 +1918,6 @@ var app = (function () {
     			{
     				point: shiftedPoint,
     				heading: 0,
-    				scale,
     				boundries: initialState.boundries
     			},
     			code.steps

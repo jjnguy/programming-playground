@@ -17,8 +17,6 @@
     max: Point;
   };
 
-  type Scale = number;
-
   type StepExecutorCollection = Map<
     TextStepTypes | NumberStepTypes | RepeatStepType,
     StepExecutor
@@ -38,7 +36,6 @@
   type DrawingState = {
     heading: number;
     point: Point;
-    scale: Scale;
     boundries: Boundries;
   };
 
@@ -79,14 +76,10 @@
       let nextPoint = {
         x:
           currentState.point.x +
-          Math.cos(degToRad(currentState.heading)) *
-            step.value *
-            currentState.scale,
+          Math.cos(degToRad(currentState.heading)) * step.value,
         y:
           currentState.point.y +
-          Math.sin(degToRad(currentState.heading)) *
-            step.value *
-            currentState.scale,
+          Math.sin(degToRad(currentState.heading)) * step.value,
       };
       if (ctx) {
         ctx.beginPath();
@@ -121,14 +114,10 @@
       let nextPoint = {
         x:
           currentState.point.x +
-          Math.cos(degToRad(currentState.heading)) *
-            step.value *
-            currentState.scale,
+          Math.cos(degToRad(currentState.heading)) * step.value,
         y:
           currentState.point.y +
-          Math.sin(degToRad(currentState.heading)) *
-            step.value *
-            currentState.scale,
+          Math.sin(degToRad(currentState.heading)) * step.value,
       };
       if (ctx) {
         ctx.beginPath();
@@ -256,7 +245,6 @@
     let initialState: DrawingState = {
       point: { ...canvasCenter },
       heading: 0,
-      scale: 1,
       boundries: {
         min: canvasCenter,
         max: canvasCenter,
@@ -270,17 +258,6 @@
 
     let finalState = calculateBoundries(initialState, code.steps);
 
-    let scales = {
-      x:
-        canvas.width /
-        (finalState.boundries.max.x - finalState.boundries.min.x),
-      y:
-        canvas.height /
-        (finalState.boundries.max.y - finalState.boundries.min.y),
-    };
-
-    let scale = Math.min(scales.x, scales.y);
-
     let centerOfResult = {
       x: (finalState.boundries.max.x + finalState.boundries.min.x) / 2,
       y: (finalState.boundries.max.y + finalState.boundries.min.y) / 2,
@@ -291,14 +268,9 @@
       y: centerOfResult.y - canvasCenter.y,
     };
 
-    let xShift =
-      -finalState.boundries.min.x + (distanceOffCenter.x * scale) / 2;
-    let yShift =
-      -finalState.boundries.min.y + (distanceOffCenter.y * scale) / 2;
-
     let shiftedPoint = {
-      x: canvasCenter.x + xShift,
-      y: canvasCenter.y + yShift,
+      x: canvasCenter.x - distanceOffCenter.x,
+      y: canvasCenter.y - distanceOffCenter.y,
     };
 
     evaluateCode(
@@ -306,7 +278,6 @@
       {
         point: shiftedPoint,
         heading: 0,
-        scale: scale,
         boundries: initialState.boundries,
       },
       code.steps
