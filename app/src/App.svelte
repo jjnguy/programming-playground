@@ -244,6 +244,75 @@
     return currentState;
   }
 
+  let autoCenter = true;
+
+  function drawCode() {
+    let ctx = canvas.getContext("2d");
+    let canvasCenter = { x: canvas.width / 2, y: canvas.height / 2 };
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.clearRect(0, 0, 500, 500);
+
+    let initialState: DrawingState = {
+      point: { ...canvasCenter },
+      heading: 0,
+      scale: 1,
+      boundries: {
+        min: canvasCenter,
+        max: canvasCenter,
+      },
+    };
+
+    if (!autoCenter) {
+      evaluateCode(ctx, initialState, code.steps);
+      return;
+    }
+
+    let finalState = calculateBoundries(initialState, code.steps);
+
+    let scales = {
+      x:
+        canvas.width /
+        (finalState.boundries.max.x - finalState.boundries.min.x),
+      y:
+        canvas.height /
+        (finalState.boundries.max.y - finalState.boundries.min.y),
+    };
+
+    let scale = Math.min(scales.x, scales.y);
+
+    let centerOfResult = {
+      x: (finalState.boundries.max.x + finalState.boundries.min.x) / 2,
+      y: (finalState.boundries.max.y + finalState.boundries.min.y) / 2,
+    };
+
+    let distanceOffCenter = {
+      x: centerOfResult.x - canvasCenter.x,
+      y: centerOfResult.y - canvasCenter.y,
+    };
+
+    let xShift =
+      -finalState.boundries.min.x + (distanceOffCenter.x * scale) / 2;
+    let yShift =
+      -finalState.boundries.min.y + (distanceOffCenter.y * scale) / 2;
+
+    let shiftedPoint = {
+      x: canvasCenter.x + xShift,
+      y: canvasCenter.y + yShift,
+    };
+
+    evaluateCode(
+      ctx,
+      {
+        point: shiftedPoint,
+        heading: 0,
+        scale: scale,
+        boundries: initialState.boundries,
+      },
+      code.steps
+    );
+  }
+
   onMount(() => {
     if (screen.width < 1000) {
       canvas.width = canvas.height = screen.width;
@@ -251,118 +320,12 @@
       canvas.width = canvas.height = 500;
     }
 
-    let ctx = canvas.getContext("2d");
-    let initialPoint = { x: canvas.width / 2, y: canvas.height / 2 };
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
-    ctx.clearRect(0, 0, 500, 500);
-
-    let initialState: DrawingState = {
-      point: { ...initialPoint },
-      heading: 0,
-      scale: 1,
-      boundries: {
-        min: {
-          x: 10000000,
-          y: 10000000,
-        },
-        max: {
-          x: -1000000000,
-          y: -100000000,
-        },
-      },
-    };
-
-    let finalState = calculateBoundries(initialState, code.steps);
-
-    let scales = {
-      x:
-        canvas.width /
-        (finalState.boundries.max.x - finalState.boundries.min.x),
-      y:
-        canvas.height /
-        (finalState.boundries.max.y - finalState.boundries.min.y),
-    };
-
-    let scale = Math.min(scales.x, scales.y);
-
-    let xShift = -finalState.boundries.min.x * scale;
-    let yShift = -finalState.boundries.min.y * scale;
-
-    let shiftedPoint = {
-      x: initialPoint.x + xShift,
-      y: initialPoint.y + yShift,
-    };
-
-    evaluateCode(
-      ctx,
-      {
-        point: shiftedPoint,
-        heading: 0,
-        scale: scale,
-        boundries: initialState.boundries,
-      },
-      code.steps
-    );
+    drawCode();
   });
 
   afterUpdate(() => {
-    //return;
     localStorage.setItem("prog-playground_code", JSON.stringify(code));
-
-    let ctx = canvas.getContext("2d");
-    let initialPoint = { x: canvas.width / 2, y: canvas.height / 2 };
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
-    ctx.clearRect(0, 0, 500, 500);
-
-    let initialState: DrawingState = {
-      point: { ...initialPoint },
-      heading: 0,
-      scale: 1,
-      boundries: {
-        min: {
-          x: 10000000,
-          y: 10000000,
-        },
-        max: {
-          x: -1000000000,
-          y: -100000000,
-        },
-      },
-    };
-
-    let finalState = calculateBoundries(initialState, code.steps);
-
-    let scales = {
-      x:
-        canvas.width /
-        (finalState.boundries.max.x - finalState.boundries.min.x),
-      y:
-        canvas.height /
-        (finalState.boundries.max.y - finalState.boundries.min.y),
-    };
-
-    let scale = Math.min(scales.x, scales.y);
-
-    let xShift = -finalState.boundries.min.x * scale;
-    let yShift = -finalState.boundries.min.y * scale;
-
-    let shiftedPoint = {
-      x: initialPoint.x + xShift,
-      y: initialPoint.y + yShift,
-    };
-
-    evaluateCode(
-      ctx,
-      {
-        point: shiftedPoint,
-        heading: 0,
-        scale: scale,
-        boundries: initialState.boundries,
-      },
-      code.steps
-    );
+    drawCode();
   });
 
   function degToRad(degrees) {
@@ -374,6 +337,9 @@
 <main>
   <canvas bind:this={canvas} id="canvas" />
   <section>
+    <label
+      >Auto Center <input type="checkbox" bind:checked={autoCenter} /></label
+    >
     <CodeBuilder bind:steps={code.steps} />
   </section>
 </main>

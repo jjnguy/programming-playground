@@ -1627,14 +1627,20 @@ var app = (function () {
     function create_fragment(ctx) {
     	let main;
     	let canvas_1;
-    	let t;
+    	let t0;
     	let section;
+    	let label;
+    	let t1;
+    	let input;
+    	let t2;
     	let codebuilder;
     	let updating_steps;
     	let current;
+    	let mounted;
+    	let dispose;
 
     	function codebuilder_steps_binding(value) {
-    		/*codebuilder_steps_binding*/ ctx[3](value);
+    		/*codebuilder_steps_binding*/ ctx[5](value);
     	}
 
     	let codebuilder_props = {};
@@ -1650,16 +1656,23 @@ var app = (function () {
     		c: function create() {
     			main = element("main");
     			canvas_1 = element("canvas");
-    			t = space();
+    			t0 = space();
     			section = element("section");
+    			label = element("label");
+    			t1 = text("Auto Center ");
+    			input = element("input");
+    			t2 = space();
     			create_component(codebuilder.$$.fragment);
     			attr_dev(canvas_1, "id", "canvas");
     			attr_dev(canvas_1, "class", "svelte-1snv1ja");
-    			add_location(canvas_1, file, 229, 2, 7517);
+    			add_location(canvas_1, file, 199, 2, 6649);
+    			attr_dev(input, "type", "checkbox");
+    			add_location(input, file, 202, 19, 6733);
+    			add_location(label, file, 201, 4, 6707);
     			attr_dev(section, "class", "svelte-1snv1ja");
-    			add_location(section, file, 230, 2, 7561);
+    			add_location(section, file, 200, 2, 6693);
     			attr_dev(main, "class", "svelte-1snv1ja");
-    			add_location(main, file, 228, 0, 7508);
+    			add_location(main, file, 198, 0, 6640);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1667,13 +1680,27 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
     			append_dev(main, canvas_1);
-    			/*canvas_1_binding*/ ctx[2](canvas_1);
-    			append_dev(main, t);
+    			/*canvas_1_binding*/ ctx[3](canvas_1);
+    			append_dev(main, t0);
     			append_dev(main, section);
+    			append_dev(section, label);
+    			append_dev(label, t1);
+    			append_dev(label, input);
+    			input.checked = /*autoCenter*/ ctx[2];
+    			append_dev(section, t2);
     			mount_component(codebuilder, section, null);
     			current = true;
+
+    			if (!mounted) {
+    				dispose = listen_dev(input, "change", /*input_change_handler*/ ctx[4]);
+    				mounted = true;
+    			}
     		},
     		p: function update(ctx, [dirty]) {
+    			if (dirty & /*autoCenter*/ 4) {
+    				input.checked = /*autoCenter*/ ctx[2];
+    			}
+
     			const codebuilder_changes = {};
 
     			if (!updating_steps && dirty & /*code*/ 1) {
@@ -1695,8 +1722,10 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(main);
-    			/*canvas_1_binding*/ ctx[2](null);
+    			/*canvas_1_binding*/ ctx[3](null);
     			destroy_component(codebuilder);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
@@ -1842,6 +1871,71 @@ var app = (function () {
     		return currentState;
     	}
 
+    	let autoCenter = true;
+
+    	function drawCode() {
+    		let ctx = canvas.getContext("2d");
+
+    		let canvasCenter = {
+    			x: canvas.width / 2,
+    			y: canvas.height / 2
+    		};
+
+    		ctx.strokeStyle = "black";
+    		ctx.lineWidth = 1;
+    		ctx.clearRect(0, 0, 500, 500);
+
+    		let initialState = {
+    			point: Object.assign({}, canvasCenter),
+    			heading: 0,
+    			scale: 1,
+    			boundries: { min: canvasCenter, max: canvasCenter }
+    		};
+
+    		if (!autoCenter) {
+    			evaluateCode(ctx, initialState, code.steps);
+    			return;
+    		}
+
+    		let finalState = calculateBoundries(initialState, code.steps);
+
+    		let scales = {
+    			x: canvas.width / (finalState.boundries.max.x - finalState.boundries.min.x),
+    			y: canvas.height / (finalState.boundries.max.y - finalState.boundries.min.y)
+    		};
+
+    		let scale = Math.min(scales.x, scales.y);
+
+    		let centerOfResult = {
+    			x: (finalState.boundries.max.x + finalState.boundries.min.x) / 2,
+    			y: (finalState.boundries.max.y + finalState.boundries.min.y) / 2
+    		};
+
+    		let distanceOffCenter = {
+    			x: centerOfResult.x - canvasCenter.x,
+    			y: centerOfResult.y - canvasCenter.y
+    		};
+
+    		let xShift = -finalState.boundries.min.x + distanceOffCenter.x * scale / 2;
+    		let yShift = -finalState.boundries.min.y + distanceOffCenter.y * scale / 2;
+
+    		let shiftedPoint = {
+    			x: canvasCenter.x + xShift,
+    			y: canvasCenter.y + yShift
+    		};
+
+    		evaluateCode(
+    			ctx,
+    			{
+    				point: shiftedPoint,
+    				heading: 0,
+    				scale,
+    				boundries: initialState.boundries
+    			},
+    			code.steps
+    		);
+    	}
+
     	onMount(() => {
     		if (screen.width < 1000) {
     			$$invalidate(1, canvas.width = $$invalidate(1, canvas.height = screen.width, canvas), canvas);
@@ -1849,106 +1943,12 @@ var app = (function () {
     			$$invalidate(1, canvas.width = $$invalidate(1, canvas.height = 500, canvas), canvas);
     		}
 
-    		let ctx = canvas.getContext("2d");
-
-    		let initialPoint = {
-    			x: canvas.width / 2,
-    			y: canvas.height / 2
-    		};
-
-    		ctx.strokeStyle = "black";
-    		ctx.lineWidth = 1;
-    		ctx.clearRect(0, 0, 500, 500);
-
-    		let initialState = {
-    			point: Object.assign({}, initialPoint),
-    			heading: 0,
-    			scale: 1,
-    			boundries: {
-    				min: { x: 10000000, y: 10000000 },
-    				max: { x: -1000000000, y: -100000000 }
-    			}
-    		};
-
-    		let finalState = calculateBoundries(initialState, code.steps);
-
-    		let scales = {
-    			x: canvas.width / (finalState.boundries.max.x - finalState.boundries.min.x),
-    			y: canvas.height / (finalState.boundries.max.y - finalState.boundries.min.y)
-    		};
-
-    		let scale = Math.min(scales.x, scales.y);
-    		let xShift = -finalState.boundries.min.x * scale;
-    		let yShift = -finalState.boundries.min.y * scale;
-
-    		let shiftedPoint = {
-    			x: initialPoint.x + xShift,
-    			y: initialPoint.y + yShift
-    		};
-
-    		evaluateCode(
-    			ctx,
-    			{
-    				point: shiftedPoint,
-    				heading: 0,
-    				scale,
-    				boundries: initialState.boundries
-    			},
-    			code.steps
-    		);
+    		drawCode();
     	});
 
     	afterUpdate(() => {
-    		//return;
     		localStorage.setItem("prog-playground_code", JSON.stringify(code));
-
-    		let ctx = canvas.getContext("2d");
-
-    		let initialPoint = {
-    			x: canvas.width / 2,
-    			y: canvas.height / 2
-    		};
-
-    		ctx.strokeStyle = "black";
-    		ctx.lineWidth = 1;
-    		ctx.clearRect(0, 0, 500, 500);
-
-    		let initialState = {
-    			point: Object.assign({}, initialPoint),
-    			heading: 0,
-    			scale: 1,
-    			boundries: {
-    				min: { x: 10000000, y: 10000000 },
-    				max: { x: -1000000000, y: -100000000 }
-    			}
-    		};
-
-    		let finalState = calculateBoundries(initialState, code.steps);
-
-    		let scales = {
-    			x: canvas.width / (finalState.boundries.max.x - finalState.boundries.min.x),
-    			y: canvas.height / (finalState.boundries.max.y - finalState.boundries.min.y)
-    		};
-
-    		let scale = Math.min(scales.x, scales.y);
-    		let xShift = -finalState.boundries.min.x * scale;
-    		let yShift = -finalState.boundries.min.y * scale;
-
-    		let shiftedPoint = {
-    			x: initialPoint.x + xShift,
-    			y: initialPoint.y + yShift
-    		};
-
-    		evaluateCode(
-    			ctx,
-    			{
-    				point: shiftedPoint,
-    				heading: 0,
-    				scale,
-    				boundries: initialState.boundries
-    			},
-    			code.steps
-    		);
+    		drawCode();
     	});
 
     	const writable_props = [];
@@ -1962,6 +1962,11 @@ var app = (function () {
     			canvas = $$value;
     			$$invalidate(1, canvas);
     		});
+    	}
+
+    	function input_change_handler() {
+    		autoCenter = this.checked;
+    		$$invalidate(2, autoCenter);
     	}
 
     	function codebuilder_steps_binding(value) {
@@ -1981,6 +1986,8 @@ var app = (function () {
     		canvas,
     		calculateBoundries,
     		evaluateCode,
+    		autoCenter,
+    		drawCode,
     		degToRad
     	});
 
@@ -1989,13 +1996,21 @@ var app = (function () {
     		if ('savedCode' in $$props) savedCode = $$props.savedCode;
     		if ('code' in $$props) $$invalidate(0, code = $$props.code);
     		if ('canvas' in $$props) $$invalidate(1, canvas = $$props.canvas);
+    		if ('autoCenter' in $$props) $$invalidate(2, autoCenter = $$props.autoCenter);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [code, canvas, canvas_1_binding, codebuilder_steps_binding];
+    	return [
+    		code,
+    		canvas,
+    		autoCenter,
+    		canvas_1_binding,
+    		input_change_handler,
+    		codebuilder_steps_binding
+    	];
     }
 
     class App extends SvelteComponentDev {
