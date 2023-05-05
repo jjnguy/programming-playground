@@ -3,6 +3,8 @@
   import CodeBuilder from "./components/CodeBuilder.svelte";
   import type {
     Code,
+    DrawStep,
+    DrawStepType,
     NumberStep,
     NumberStepTypes,
     RepeatStep,
@@ -18,7 +20,7 @@
   };
 
   type StepExecutorCollection = Map<
-    TextStepTypes | NumberStepTypes | RepeatStepType,
+    TextStepTypes | NumberStepTypes | RepeatStepType | DrawStepType,
     StepExecutor
   >;
 
@@ -107,7 +109,7 @@
   stepExecutors.set(
     "draw",
     (
-      step: NumberStep,
+      step: DrawStep,
       currentState: DrawingState,
       ctx?: CanvasRenderingContext2D
     ): DrawingState => {
@@ -120,6 +122,7 @@
           Math.sin(degToRad(currentState.heading)) * step.value,
       };
       if (ctx) {
+        ctx.strokeStyle = step.color;
         ctx.beginPath();
         ctx.moveTo(currentState.point.x, currentState.point.y);
         ctx.lineTo(nextPoint.x, nextPoint.y);

@@ -4,13 +4,21 @@ export type Code = {
 }
 
 export type TextStepTypes = "text";
-export type NumberStepTypes = "draw" | "move" | "rotate";
+export type NumberStepTypes = "move" | "rotate";
 
-export type Step = NumberStep | TextStep | RepeatStep;
+export type Step = NumberStep | TextStep | RepeatStep | DrawStep;
 
 export type NumberStep = {
   type: NumberStepTypes
   value: number
+}
+
+export type DrawStepType = "draw";
+
+export type DrawStep = {
+  type: DrawStepType;
+  value: number;
+  color: string;
 }
 
 export type TextStep = {
