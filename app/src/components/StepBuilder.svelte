@@ -29,6 +29,7 @@
       step = {
         type: step.type,
         value: "",
+        fontSize: 10,
       };
     } else if (step.type == "draw" && !step.color) {
       step = {
@@ -60,6 +61,7 @@
 </select>
 {#if step.type == "text"}
   <input bind:value={step.value} />
+  <input bind:value={step.fontSize} type="number" />
 {:else if step.type == "draw"}
   <Stepper bind:value={step.value} step={0.5} />
   <input type="color" bind:value={step.color} />

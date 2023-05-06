@@ -37,6 +37,7 @@ export let textStep = (
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     if (ctx) {
+        ctx.font = `${step.fontSize}px sans-serif`;
         let measurement = ctx.measureText(step.value);
         let actualHeight =
             measurement.actualBoundingBoxAscent +

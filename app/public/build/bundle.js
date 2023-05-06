@@ -751,11 +751,11 @@ var app = (function () {
 
     function get_each_context$2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[13] = list[i];
+    	child_ctx[14] = list[i];
     	return child_ctx;
     }
 
-    // (70:32) 
+    // (72:32) 
     function create_if_block_4(ctx) {
     	let stepper;
     	let updating_value;
@@ -766,7 +766,7 @@ var app = (function () {
     	let current;
 
     	function stepper_value_binding_2(value) {
-    		/*stepper_value_binding_2*/ ctx[10](value);
+    		/*stepper_value_binding_2*/ ctx[11](value);
     	}
 
     	let stepper_props = { min: 1 };
@@ -779,7 +779,7 @@ var app = (function () {
     	binding_callbacks.push(() => bind(stepper, 'value', stepper_value_binding_2));
 
     	function codebuilder_steps_binding(value) {
-    		/*codebuilder_steps_binding*/ ctx[11](value);
+    		/*codebuilder_steps_binding*/ ctx[12](value);
     	}
 
     	let codebuilder_props = { functions: /*functions*/ ctx[1] };
@@ -798,7 +798,7 @@ var app = (function () {
     			div = element("div");
     			create_component(codebuilder.$$.fragment);
     			attr_dev(div, "class", "svelte-1gkjmdj");
-    			add_location(div, file$2, 71, 2, 1940);
+    			add_location(div, file$2, 73, 2, 2021);
     		},
     		m: function mount(target, anchor) {
     			mount_component(stepper, target, anchor);
@@ -851,21 +851,21 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(70:32) ",
+    		source: "(72:32) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (68:32) 
+    // (70:32) 
     function create_if_block_3(ctx) {
     	let stepper;
     	let updating_value;
     	let current;
 
     	function stepper_value_binding_1(value) {
-    		/*stepper_value_binding_1*/ ctx[9](value);
+    		/*stepper_value_binding_1*/ ctx[10](value);
     	}
 
     	let stepper_props = { step: 0.5 };
@@ -914,14 +914,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(68:32) ",
+    		source: "(70:32) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (62:34) 
+    // (64:34) 
     function create_if_block_2(ctx) {
     	let select;
     	let mounted;
@@ -942,8 +942,8 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			if (/*step*/ ctx[0].function === void 0) add_render_callback(() => /*select_change_handler_1*/ ctx[8].call(select));
-    			add_location(select, file$2, 62, 2, 1643);
+    			if (/*step*/ ctx[0].function === void 0) add_render_callback(() => /*select_change_handler_1*/ ctx[9].call(select));
+    			add_location(select, file$2, 64, 2, 1724);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, select, anchor);
@@ -957,7 +957,7 @@ var app = (function () {
     			select_option(select, /*step*/ ctx[0].function, true);
 
     			if (!mounted) {
-    				dispose = listen_dev(select, "change", /*select_change_handler_1*/ ctx[8]);
+    				dispose = listen_dev(select, "change", /*select_change_handler_1*/ ctx[9]);
     				mounted = true;
     			}
     		},
@@ -1004,14 +1004,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(62:34) ",
+    		source: "(64:34) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (59:30) 
+    // (61:30) 
     function create_if_block_1(ctx) {
     	let stepper;
     	let updating_value;
@@ -1022,7 +1022,7 @@ var app = (function () {
     	let dispose;
 
     	function stepper_value_binding(value) {
-    		/*stepper_value_binding*/ ctx[6](value);
+    		/*stepper_value_binding*/ ctx[7](value);
     	}
 
     	let stepper_props = { step: 0.5 };
@@ -1040,7 +1040,7 @@ var app = (function () {
     			t = space();
     			input = element("input");
     			attr_dev(input, "type", "color");
-    			add_location(input, file$2, 60, 2, 1557);
+    			add_location(input, file$2, 62, 2, 1638);
     		},
     		m: function mount(target, anchor) {
     			mount_component(stepper, target, anchor);
@@ -1050,7 +1050,7 @@ var app = (function () {
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(input, "input", /*input_input_handler_1*/ ctx[7]);
+    				dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[8]);
     				mounted = true;
     			}
     		},
@@ -1091,44 +1091,63 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(59:30) ",
+    		source: "(61:30) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (57:0) {#if step.type == "text"}
+    // (58:0) {#if step.type == "text"}
     function create_if_block$2(ctx) {
-    	let input;
+    	let input0;
+    	let t;
+    	let input1;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			input = element("input");
-    			add_location(input, file$2, 57, 2, 1438);
+    			input0 = element("input");
+    			t = space();
+    			input1 = element("input");
+    			add_location(input0, file$2, 58, 2, 1465);
+    			attr_dev(input1, "type", "number");
+    			add_location(input1, file$2, 59, 2, 1502);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, input, anchor);
-    			set_input_value(input, /*step*/ ctx[0].value);
+    			insert_dev(target, input0, anchor);
+    			set_input_value(input0, /*step*/ ctx[0].value);
+    			insert_dev(target, t, anchor);
+    			insert_dev(target, input1, anchor);
+    			set_input_value(input1, /*step*/ ctx[0].fontSize);
 
     			if (!mounted) {
-    				dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[5]);
+    				dispose = [
+    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[5]),
+    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[6])
+    				];
+
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*step*/ 1 && input.value !== /*step*/ ctx[0].value) {
-    				set_input_value(input, /*step*/ ctx[0].value);
+    			if (dirty & /*step*/ 1 && input0.value !== /*step*/ ctx[0].value) {
+    				set_input_value(input0, /*step*/ ctx[0].value);
+    			}
+
+    			if (dirty & /*step*/ 1 && to_number(input1.value) !== /*step*/ ctx[0].fontSize) {
+    				set_input_value(input1, /*step*/ ctx[0].fontSize);
     			}
     		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(input);
+    			if (detaching) detach_dev(input0);
+    			if (detaching) detach_dev(t);
+    			if (detaching) detach_dev(input1);
     			mounted = false;
-    			dispose();
+    			run_all(dispose);
     		}
     	};
 
@@ -1136,17 +1155,17 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(57:0) {#if step.type == \\\"text\\\"}",
+    		source: "(58:0) {#if step.type == \\\"text\\\"}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (64:4) {#each functions as func}
+    // (66:4) {#each functions as func}
     function create_each_block$2(ctx) {
     	let option;
-    	let t_value = /*func*/ ctx[13].name + "";
+    	let t_value = /*func*/ ctx[14].name + "";
     	let t;
     	let option_value_value;
 
@@ -1154,18 +1173,18 @@ var app = (function () {
     		c: function create() {
     			option = element("option");
     			t = text(t_value);
-    			option.__value = option_value_value = /*func*/ ctx[13].name;
+    			option.__value = option_value_value = /*func*/ ctx[14].name;
     			option.value = option.__value;
-    			add_location(option, file$2, 64, 6, 1717);
+    			add_location(option, file$2, 66, 6, 1798);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
     			append_dev(option, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*functions*/ 2 && t_value !== (t_value = /*func*/ ctx[13].name + "")) set_data_dev(t, t_value);
+    			if (dirty & /*functions*/ 2 && t_value !== (t_value = /*func*/ ctx[14].name + "")) set_data_dev(t, t_value);
 
-    			if (dirty & /*functions*/ 2 && option_value_value !== (option_value_value = /*func*/ ctx[13].name)) {
+    			if (dirty & /*functions*/ 2 && option_value_value !== (option_value_value = /*func*/ ctx[14].name)) {
     				prop_dev(option, "__value", option_value_value);
     				option.value = option.__value;
     			}
@@ -1179,7 +1198,7 @@ var app = (function () {
     		block,
     		id: create_each_block$2.name,
     		type: "each",
-    		source: "(64:4) {#each functions as func}",
+    		source: "(66:4) {#each functions as func}",
     		ctx
     	});
 
@@ -1248,25 +1267,25 @@ var app = (function () {
     			button.textContent = "delete";
     			option0.__value = "move";
     			option0.value = option0.__value;
-    			add_location(option0, file$2, 49, 2, 1242);
+    			add_location(option0, file$2, 50, 2, 1269);
     			option1.__value = "draw";
     			option1.value = option1.__value;
-    			add_location(option1, file$2, 50, 2, 1267);
+    			add_location(option1, file$2, 51, 2, 1294);
     			option2.__value = "rotate";
     			option2.value = option2.__value;
-    			add_location(option2, file$2, 51, 2, 1292);
+    			add_location(option2, file$2, 52, 2, 1319);
     			option3.__value = "text";
     			option3.value = option3.__value;
-    			add_location(option3, file$2, 52, 2, 1319);
+    			add_location(option3, file$2, 53, 2, 1346);
     			option4.__value = "repeat";
     			option4.value = option4.__value;
-    			add_location(option4, file$2, 53, 2, 1344);
+    			add_location(option4, file$2, 54, 2, 1371);
     			option5.__value = "function";
     			option5.value = option5.__value;
-    			add_location(option5, file$2, 54, 2, 1371);
+    			add_location(option5, file$2, 55, 2, 1398);
     			if (/*step*/ ctx[0].type === void 0) add_render_callback(() => /*select_change_handler*/ ctx[4].call(select));
-    			add_location(select, file$2, 48, 0, 1183);
-    			add_location(button, file$2, 75, 0, 2021);
+    			add_location(select, file$2, 49, 0, 1210);
+    			add_location(button, file$2, 77, 0, 2102);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1392,7 +1411,7 @@ var app = (function () {
     		} else if (step.type == "function") {
     			$$invalidate(0, step = { type: step.type, function: null });
     		} else if (step.type == "text" && !step.value) {
-    			$$invalidate(0, step = { type: step.type, value: "" });
+    			$$invalidate(0, step = { type: step.type, value: "", fontSize: 10 });
     		} else if (step.type == "draw" && !step.color) {
     			$$invalidate(0, step = {
     				type: step.type,
@@ -1425,8 +1444,13 @@ var app = (function () {
     		$$invalidate(0, step);
     	}
 
-    	function input_input_handler() {
+    	function input0_input_handler() {
     		step.value = this.value;
+    		$$invalidate(0, step);
+    	}
+
+    	function input1_input_handler() {
+    		step.fontSize = to_number(this.value);
     		$$invalidate(0, step);
     	}
 
@@ -1437,7 +1461,7 @@ var app = (function () {
     		}
     	}
 
-    	function input_input_handler_1() {
+    	function input_input_handler() {
     		step.color = this.value;
     		$$invalidate(0, step);
     	}
@@ -1500,9 +1524,10 @@ var app = (function () {
     		requestDeletion,
     		typeChanged,
     		select_change_handler,
-    		input_input_handler,
+    		input0_input_handler,
+    		input1_input_handler,
     		stepper_value_binding,
-    		input_input_handler_1,
+    		input_input_handler,
     		select_change_handler_1,
     		stepper_value_binding_1,
     		stepper_value_binding_2,
@@ -1951,6 +1976,7 @@ var app = (function () {
 
     let textStep = (step, currentState, functions, ctx) => {
         if (ctx) {
+            ctx.font = `${step.fontSize}px sans-serif`;
             let measurement = ctx.measureText(step.value);
             let actualHeight = measurement.actualBoundingBoxAscent +
                 measurement.actualBoundingBoxDescent;

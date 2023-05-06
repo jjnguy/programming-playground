@@ -30,6 +30,7 @@ export type DrawStep = {
 export type TextStep = {
   type: TextStepTypes
   value: string
+  fontSize: number
 }
 
 export type RepeatStepType = "repeat";
