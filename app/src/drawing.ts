@@ -1,5 +1,5 @@
-import { moveStep, repeatStep, rotateStep, textStep, type DrawingState, type StepExecutorCollection, type StepExecutor, drawStep } from "./drawingSteps";
-import type { DrawStep, DrawStepType, NumberStepTypes, RepeatStepType, Step, TextStepTypes } from "./types";
+import { moveStep, repeatStep, rotateStep, textStep, functionStep, type DrawingState, type StepExecutorCollection, type StepExecutor, drawStep } from "./drawingSteps";
+import type { DrawStep, DrawStepType, NumberStepTypes, RepeatStepType, Step, StepFunction, TextStepTypes } from "./types";
 
 
 export let stepExecutors: StepExecutorCollection = new Map<
@@ -17,13 +17,16 @@ stepExecutors.set("rotate", rotateStep);
 
 stepExecutors.set("repeat", repeatStep);
 
+stepExecutors.set("function", functionStep);
+
 export function evaluateCode(
     ctx,
     currentState: DrawingState,
-    steps: Array<Step>
+    steps: Array<Step>,
+    functions: Array<StepFunction>
 ): DrawingState {
     steps.forEach((step: Step) => {
-        currentState = stepExecutors.get(step.type)(step, currentState, ctx);
+        currentState = stepExecutors.get(step.type)(step, currentState, functions, ctx);
     });
 
     return currentState;

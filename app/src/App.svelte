@@ -1,18 +1,7 @@
 <script lang="ts">
   import { afterUpdate, onMount } from "svelte";
   import CodeBuilder from "./components/CodeBuilder.svelte";
-  import type {
-    Code,
-    DrawStep,
-    DrawStepType,
-    NumberStep,
-    NumberStepTypes,
-    RepeatStep,
-    RepeatStepType,
-    Step,
-    TextStep,
-    TextStepTypes,
-  } from "./types";
+  import type { Code, Step, StepFunction } from "./types";
   import type { DrawingState } from "./drawingSteps";
   import { evaluateCode, stepExecutors } from "./drawing";
 
@@ -53,12 +42,21 @@
             ],
           },
         ],
+        functions: [],
       };
+
+  code.functions = code.functions || [];
+
   let canvas: HTMLCanvasElement;
 
   function calculateBoundries(currentState: DrawingState, steps: Array<Step>) {
     steps.forEach((step: Step) => {
-      currentState = stepExecutors.get(step.type)(step, currentState, null);
+      currentState = stepExecutors.get(step.type)(
+        step,
+        currentState,
+        code.functions,
+        null
+      );
     });
     return currentState;
   }
@@ -82,7 +80,7 @@
     };
 
     if (!autoCenter) {
-      evaluateCode(ctx, initialState, code.steps);
+      evaluateCode(ctx, initialState, code.steps, code.functions);
       return;
     }
 
@@ -110,7 +108,8 @@
         heading: 0,
         boundries: initialState.boundries,
       },
-      code.steps
+      code.steps,
+      code.functions
     );
   }
 
@@ -128,6 +127,18 @@
     localStorage.setItem("prog-playground_code", JSON.stringify(code));
     drawCode();
   });
+
+  let selectedFunction: StepFunction;
+  let newFunctionName: string;
+  function addFunction() {
+    code.functions = [
+      ...code.functions,
+      {
+        name: newFunctionName,
+        steps: [],
+      },
+    ];
+  }
 </script>
 
 <main>
@@ -136,7 +147,25 @@
     <label
       >Auto Center <input type="checkbox" bind:checked={autoCenter} /></label
     >
-    <CodeBuilder bind:steps={code.steps} />
+    <CodeBuilder bind:steps={code.steps} functions={code.functions} />
+  </section>
+  <section>
+    <h2>functions</h2>
+    <select bind:value={selectedFunction}>
+      {#each code.functions as func}
+        <option value={func}>{func.name}</option>
+      {/each}
+    </select>
+    {#if selectedFunction}
+      <CodeBuilder
+        bind:steps={selectedFunction.steps}
+        functions={code.functions}
+      />
+    {/if}
+    <form on:submit|preventDefault={addFunction}>
+      <input bind:value={newFunctionName} />
+      <button type="submit">create</button>
+    </form>
   </section>
 </main>
 

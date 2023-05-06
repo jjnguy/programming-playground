@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { Step } from "../types";
+  import type { Step, StepFunction } from "../types";
   import StepBuilder from "./StepBuilder.svelte";
 
   export let steps: Array<Step>;
+  export let functions: Array<StepFunction>;
 
   function insertStep(ix: number) {
     steps.splice(ix, 0, {
@@ -25,7 +26,7 @@
         <button on:click={() => insertStep(ix)}>insert step</button>
       </li>
       <li>
-        <StepBuilder on:delete={() => del(ix)} bind:step />
+        <StepBuilder on:delete={() => del(ix)} bind:step {functions} />
       </li>
     {/each}
     <li>

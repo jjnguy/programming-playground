@@ -1,5 +1,5 @@
 import { evaluateCode } from "./drawing";
-import type { DrawStep, DrawStepType, NumberStep, NumberStepTypes, RepeatStep, RepeatStepType, TextStep, TextStepTypes } from "./types";
+import type { DrawStep, DrawStepType, FunctionStep, FunctionStepType, NumberStep, NumberStepTypes, RepeatStep, RepeatStepType, Step, StepFunction, TextStep, TextStepTypes } from "./types";
 
 
 export type Boundries = {
@@ -19,19 +19,21 @@ export type DrawingState = {
 };
 
 export type StepExecutorCollection = Map<
-    TextStepTypes | NumberStepTypes | RepeatStepType | DrawStepType,
+    TextStepTypes | NumberStepTypes | RepeatStepType | DrawStepType | FunctionStepType,
     StepExecutor
 >;
 
 export type StepExecutor = (
-    Step,
-    DrawingState,
-    CanvasRenderingContext2D?
+    step: Step,
+    drawingState: DrawingState,
+    functions: Array<StepFunction>,
+    ctx?: CanvasRenderingContext2D
 ) => DrawingState;
 
 export let textStep = (
     step: TextStep,
     currentState: DrawingState,
+    functions: Array<StepFunction>,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     if (ctx) {
@@ -51,6 +53,7 @@ export let textStep = (
 export let moveStep = (
     step: NumberStep,
     currentState: DrawingState,
+    functions: Array<StepFunction>,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     let nextPoint = {
@@ -81,6 +84,7 @@ export let moveStep = (
 export let drawStep = (
     step: DrawStep,
     currentState: DrawingState,
+    functions: Array<StepFunction>,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     let nextPoint = {
@@ -117,6 +121,7 @@ export let drawStep = (
 export let rotateStep = (
     step: NumberStep,
     currentState: DrawingState,
+    functions: Array<StepFunction>,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     let newHeading = currentState.heading + step.value;
@@ -130,18 +135,28 @@ export let rotateStep = (
 export let repeatStep = (
     step: RepeatStep,
     currentState: DrawingState,
+    functions: Array<StepFunction>,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     let newState = { ...currentState };
     for (let i = 0; i < step.times; i++) {
-        newState = evaluateCode(ctx, newState, step.steps);
+        newState = evaluateCode(ctx, newState, step.steps, functions);
     }
 
     return newState;
 };
 
-
 function degToRad(degrees) {
     var pi = Math.PI;
     return degrees * (pi / 180);
 }
+
+export let functionStep = (
+    step: FunctionStep,
+    currentState: DrawingState,
+    functions: Array<StepFunction>,
+    ctx?: CanvasRenderingContext2D
+): DrawingState => {
+    let fun = functions.find(f => f.name == step.function);
+    return evaluateCode(ctx, currentState, fun.steps, functions);
+};
