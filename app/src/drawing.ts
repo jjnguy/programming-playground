@@ -23,10 +23,11 @@ export function evaluateCode(
     ctx,
     currentState: DrawingState,
     steps: Array<Step>,
-    functions: Array<StepFunction>
+    functions: Array<StepFunction>,
+    time: number
 ): DrawingState {
     steps.forEach((step: Step) => {
-        currentState = stepExecutors.get(step.type)(step, currentState, functions, ctx);
+        currentState = stepExecutors.get(step.type)(step, currentState, functions, time, ctx);
     });
 
     return currentState;

@@ -27,6 +27,7 @@ export type StepExecutor = (
     step: Step,
     drawingState: DrawingState,
     functions: Array<StepFunction>,
+    time: number,
     ctx?: CanvasRenderingContext2D
 ) => DrawingState;
 
@@ -34,6 +35,7 @@ export let textStep = (
     step: TextStep,
     currentState: DrawingState,
     functions: Array<StepFunction>,
+    time: number,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     if (ctx) {
@@ -55,15 +57,16 @@ export let moveStep = (
     step: NumberStep,
     currentState: DrawingState,
     functions: Array<StepFunction>,
+    time: number,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     let nextPoint = {
         x:
             currentState.point.x +
-            Math.cos(degToRad(currentState.heading)) * step.value,
+            Math.cos(degToRad(currentState.heading)) * (step.value.min || step.value),
         y:
             currentState.point.y +
-            Math.sin(degToRad(currentState.heading)) * step.value,
+            Math.sin(degToRad(currentState.heading)) * (step.value.min || step.value),
     };
 
     return {
@@ -86,15 +89,21 @@ export let drawStep = (
     step: DrawStep,
     currentState: DrawingState,
     functions: Array<StepFunction>,
+    time: number,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
+
+    let stepValue = typeof step.value == "number"
+        ? step.value
+        : (step.value.max - step.value.min) * (time / 100.0) + step.value.min;
+
     let nextPoint = {
         x:
             currentState.point.x +
-            Math.cos(degToRad(currentState.heading)) * step.value,
+            Math.cos(degToRad(currentState.heading)) * stepValue,
         y:
             currentState.point.y +
-            Math.sin(degToRad(currentState.heading)) * step.value,
+            Math.sin(degToRad(currentState.heading)) * stepValue,
     };
     if (ctx) {
         ctx.strokeStyle = step.color;
@@ -123,9 +132,15 @@ export let rotateStep = (
     step: NumberStep,
     currentState: DrawingState,
     functions: Array<StepFunction>,
+    time: number,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
-    let newHeading = currentState.heading + step.value;
+
+    let stepValue = typeof step.value == "number"
+        ? step.value
+        : (step.value.max - step.value.min) * (time / 100.0) + step.value.min;
+
+    let newHeading = currentState.heading + stepValue;
     newHeading %= 360;
     return {
         ...currentState,
@@ -137,11 +152,12 @@ export let repeatStep = (
     step: RepeatStep,
     currentState: DrawingState,
     functions: Array<StepFunction>,
+    time: number,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     let newState = { ...currentState };
-    for (let i = 0; i < step.times; i++) {
-        newState = evaluateCode(ctx, newState, step.steps, functions);
+    for (let i = 0; i < (step.times.min || step.times); i++) {
+        newState = evaluateCode(ctx, newState, step.steps, functions, time);
     }
 
     return newState;
@@ -156,8 +172,13 @@ export let functionStep = (
     step: FunctionStep,
     currentState: DrawingState,
     functions: Array<StepFunction>,
+    time: number,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     let fun = functions.find(f => f.name == step.function);
-    return evaluateCode(ctx, currentState, fun.steps, functions);
+    if (fun) {
+        return evaluateCode(ctx, currentState, fun.steps, functions, time);
+    } else {
+        return currentState;
+    }
 };

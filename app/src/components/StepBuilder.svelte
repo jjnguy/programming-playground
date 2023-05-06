@@ -2,7 +2,7 @@
   import { createEventDispatcher } from "svelte";
   import type { Step, StepFunction } from "../types";
   import CodeBuilder from "./CodeBuilder.svelte";
-  import Stepper from "./Stepper.svelte";
+  import NumbericInput from "./NumbericInput.svelte";
 
   let dispatch = createEventDispatcher();
 
@@ -35,7 +35,7 @@
       step = {
         type: step.type,
         value: step.value || 0,
-        color: "black",
+        color: "000000",
       };
     } else if (
       step.type != "repeat" &&
@@ -63,7 +63,7 @@
   <input bind:value={step.value} />
   <input bind:value={step.fontSize} type="number" />
 {:else if step.type == "draw"}
-  <Stepper bind:value={step.value} step={0.5} />
+  <NumbericInput bind:value={step.value} step={0.5} />
   <input type="color" bind:value={step.color} />
 {:else if step.type == "function"}
   <select bind:value={step.function}>
@@ -72,9 +72,9 @@
     {/each}
   </select>
 {:else if step.type != "repeat"}
-  <Stepper bind:value={step.value} step={0.5} />
+  <NumbericInput bind:value={step.value} step={0.5} />
 {:else if step.type == "repeat"}
-  <Stepper bind:value={step.times} min={1} />
+  <NumbericInput bind:value={step.times} min={1} />
   <div>
     <CodeBuilder bind:steps={step.steps} {functions} />
   </div>

@@ -49,13 +49,17 @@
 
   let canvas: HTMLCanvasElement;
 
-  function calculateBoundries(currentState: DrawingState, steps: Array<Step>) {
+  function calculateBoundries(
+    currentState: DrawingState,
+    steps: Array<Step>,
+    time: number
+  ) {
     steps.forEach((step: Step) => {
       currentState = stepExecutors.get(step.type)(
         step,
         currentState,
         code.functions,
-        null
+        time
       );
     });
     return currentState;
@@ -63,10 +67,18 @@
 
   let autoCenter = true;
 
-  function drawCode() {
+  let play = false;
+
+  function drawCode(time) {
+    console.log(time);
+
+    if (play) {
+      requestAnimationFrame((_) => drawCode((time + 1) % 100));
+    }
+
     let ctx = canvas.getContext("2d");
     let canvasCenter = { x: canvas.width / 2, y: canvas.height / 2 };
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "#000000";
     ctx.lineWidth = 1;
     ctx.clearRect(0, 0, 500, 500);
 
@@ -80,11 +92,11 @@
     };
 
     if (!autoCenter) {
-      evaluateCode(ctx, initialState, code.steps, code.functions);
+      evaluateCode(ctx, initialState, code.steps, code.functions, time);
       return;
     }
 
-    let finalState = calculateBoundries(initialState, code.steps);
+    let finalState = calculateBoundries(initialState, code.steps, time);
 
     let centerOfResult = {
       x: (finalState.boundries.max.x + finalState.boundries.min.x) / 2,
@@ -109,7 +121,8 @@
         boundries: initialState.boundries,
       },
       code.steps,
-      code.functions
+      code.functions,
+      time
     );
   }
 
@@ -120,12 +133,12 @@
       canvas.width = canvas.height = 500;
     }
 
-    drawCode();
+    drawCode(0);
   });
 
   afterUpdate(() => {
     localStorage.setItem("prog-playground_code", JSON.stringify(code));
-    drawCode();
+    drawCode(0);
   });
 
   let selectedFunction: StepFunction;
@@ -139,15 +152,22 @@
       },
     ];
   }
+
+  $: animatables = code.steps;
 </script>
 
 <main>
   <canvas bind:this={canvas} id="canvas" />
+  <button on:click={() => (play = !play)}>play/pause</button>
   <section>
     <label
       >Auto Center <input type="checkbox" bind:checked={autoCenter} /></label
     >
     <CodeBuilder bind:steps={code.steps} functions={code.functions} />
+  </section>
+  <section>
+    <h2>Animate</h2>
+    <pre>{JSON.stringify(animatables)}</pre>
   </section>
   <section>
     <h2>functions</h2>
