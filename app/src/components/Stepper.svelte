@@ -19,6 +19,11 @@
 
 <style lang="less">
   input {
-    width: 4rem;
+    width: 4.5rem;
+    padding: 0.7rem;
+  }
+
+  button {
+    padding: 0.7rem 1rem;
   }
 </style>

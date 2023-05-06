@@ -34,3 +34,9 @@
     </li>
   </ol>
 {/if}
+
+<style lang="less">
+  button {
+    padding: 0.7rem 1rem;
+  }
+</style>

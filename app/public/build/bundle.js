@@ -566,13 +566,15 @@ var app = (function () {
     			t2 = space();
     			button1 = element("button");
     			button1.textContent = "+";
+    			attr_dev(button0, "class", "svelte-a97nfq");
     			add_location(button0, file$3, 12, 0, 226);
     			attr_dev(input, "type", "number");
     			attr_dev(input, "min", /*min*/ ctx[2]);
     			attr_dev(input, "max", /*max*/ ctx[3]);
     			attr_dev(input, "step", /*step*/ ctx[1]);
-    			attr_dev(input, "class", "svelte-smrj8u");
+    			attr_dev(input, "class", "svelte-a97nfq");
     			add_location(input, file$3, 13, 0, 267);
+    			attr_dev(button1, "class", "svelte-a97nfq");
     			add_location(button1, file$3, 14, 0, 322);
     		},
     		l: function claim(nodes) {
@@ -797,7 +799,7 @@ var app = (function () {
     			t = space();
     			div = element("div");
     			create_component(codebuilder.$$.fragment);
-    			attr_dev(div, "class", "svelte-1gkjmdj");
+    			attr_dev(div, "class", "svelte-1apvort");
     			add_location(div, file$2, 73, 2, 2021);
     		},
     		m: function mount(target, anchor) {
@@ -942,6 +944,7 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
+    			attr_dev(select, "class", "svelte-1apvort");
     			if (/*step*/ ctx[0].function === void 0) add_render_callback(() => /*select_change_handler_1*/ ctx[9].call(select));
     			add_location(select, file$2, 64, 2, 1724);
     		},
@@ -1040,6 +1043,7 @@ var app = (function () {
     			t = space();
     			input = element("input");
     			attr_dev(input, "type", "color");
+    			attr_dev(input, "class", "svelte-1apvort");
     			add_location(input, file$2, 62, 2, 1638);
     		},
     		m: function mount(target, anchor) {
@@ -1111,8 +1115,10 @@ var app = (function () {
     			input0 = element("input");
     			t = space();
     			input1 = element("input");
+    			attr_dev(input0, "class", "svelte-1apvort");
     			add_location(input0, file$2, 58, 2, 1465);
     			attr_dev(input1, "type", "number");
+    			attr_dev(input1, "class", "svelte-1apvort");
     			add_location(input1, file$2, 59, 2, 1502);
     		},
     		m: function mount(target, anchor) {
@@ -1283,8 +1289,10 @@ var app = (function () {
     			option5.__value = "function";
     			option5.value = option5.__value;
     			add_location(option5, file$2, 55, 2, 1398);
+    			attr_dev(select, "class", "svelte-1apvort");
     			if (/*step*/ ctx[0].type === void 0) add_render_callback(() => /*select_change_handler*/ ctx[4].call(select));
     			add_location(select, file$2, 49, 0, 1210);
+    			attr_dev(button, "class", "svelte-1apvort");
     			add_location(button, file$2, 77, 0, 2102);
     		},
     		l: function claim(nodes) {
@@ -1609,6 +1617,7 @@ var app = (function () {
     			li = element("li");
     			button = element("button");
     			button.textContent = "insert step";
+    			attr_dev(button, "class", "svelte-1tdip3n");
     			add_location(button, file$1, 27, 6, 593);
     			add_location(li, file$1, 26, 4, 581);
     			add_location(ol, file$1, 17, 2, 334);
@@ -1740,6 +1749,7 @@ var app = (function () {
     			t1 = space();
     			li1 = element("li");
     			create_component(stepbuilder.$$.fragment);
+    			attr_dev(button, "class", "svelte-1tdip3n");
     			add_location(button, file$1, 20, 8, 391);
     			add_location(li0, file$1, 19, 6, 377);
     			add_location(li1, file$1, 22, 6, 472);

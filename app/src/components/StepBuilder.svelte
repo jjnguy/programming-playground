@@ -85,4 +85,16 @@
   div {
     margin-left: 4rem;
   }
+
+  select {
+    padding: 0.7rem;
+  }
+
+  input {
+    padding: 0.7rem;
+  }
+
+  button {
+    padding: 0.7rem 1rem;
+  }
 </style>
