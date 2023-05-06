@@ -25,10 +25,10 @@
         type: step.type,
         function: null,
       };
-    } else if (step.type == "text" && !step.value) {
+    } else if (step.type == "text") {
       step = {
         type: step.type,
-        value: "",
+        value: "text",
         fontSize: 10,
       };
     } else if (step.type == "draw" && !step.color) {
@@ -37,12 +37,7 @@
         value: step.value || 0,
         color: "000000",
       };
-    } else if (
-      step.type != "repeat" &&
-      step.type != "text" &&
-      step.type != "draw" &&
-      !step.value
-    ) {
+    } else if (step.type != "repeat" && step.type != "draw" && !step.value) {
       step = {
         type: step.type,
         value: 0,
@@ -61,7 +56,7 @@
 </select>
 {#if step.type == "text"}
   <input bind:value={step.value} />
-  <input bind:value={step.fontSize} type="number" />
+  <NumbericInput bind:value={step.fontSize} />
 {:else if step.type == "draw"}
   <NumbericInput bind:value={step.value} step={0.5} />
   <input type="color" bind:value={step.color} />

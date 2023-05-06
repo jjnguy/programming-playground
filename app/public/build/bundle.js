@@ -1171,7 +1171,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (72:32) 
+    // (69:32) 
     function create_if_block_4(ctx) {
     	let numbericinput;
     	let updating_value;
@@ -1181,8 +1181,8 @@ var app = (function () {
     	let updating_steps;
     	let current;
 
-    	function numbericinput_value_binding_2(value) {
-    		/*numbericinput_value_binding_2*/ ctx[11](value);
+    	function numbericinput_value_binding_3(value) {
+    		/*numbericinput_value_binding_3*/ ctx[11](value);
     	}
 
     	let numbericinput_props = { min: 1 };
@@ -1196,7 +1196,7 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	binding_callbacks.push(() => bind(numbericinput, 'value', numbericinput_value_binding_2));
+    	binding_callbacks.push(() => bind(numbericinput, 'value', numbericinput_value_binding_3));
 
     	function codebuilder_steps_binding(value) {
     		/*codebuilder_steps_binding*/ ctx[12](value);
@@ -1218,7 +1218,7 @@ var app = (function () {
     			div = element("div");
     			create_component(codebuilder.$$.fragment);
     			attr_dev(div, "class", "svelte-1apvort");
-    			add_location(div, file$2, 73, 2, 2052);
+    			add_location(div, file$2, 70, 2, 1985);
     		},
     		m: function mount(target, anchor) {
     			mount_component(numbericinput, target, anchor);
@@ -1271,21 +1271,21 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(72:32) ",
+    		source: "(69:32) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (70:32) 
+    // (67:32) 
     function create_if_block_3(ctx) {
     	let numbericinput;
     	let updating_value;
     	let current;
 
-    	function numbericinput_value_binding_1(value) {
-    		/*numbericinput_value_binding_1*/ ctx[10](value);
+    	function numbericinput_value_binding_2(value) {
+    		/*numbericinput_value_binding_2*/ ctx[10](value);
     	}
 
     	let numbericinput_props = { step: 0.5 };
@@ -1299,7 +1299,7 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	binding_callbacks.push(() => bind(numbericinput, 'value', numbericinput_value_binding_1));
+    	binding_callbacks.push(() => bind(numbericinput, 'value', numbericinput_value_binding_2));
 
     	const block = {
     		c: function create() {
@@ -1338,14 +1338,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(70:32) ",
+    		source: "(67:32) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (64:34) 
+    // (61:34) 
     function create_if_block_2(ctx) {
     	let select;
     	let mounted;
@@ -1368,7 +1368,7 @@ var app = (function () {
 
     			attr_dev(select, "class", "svelte-1apvort");
     			if (/*step*/ ctx[0].function === void 0) add_render_callback(() => /*select_change_handler_1*/ ctx[9].call(select));
-    			add_location(select, file$2, 64, 2, 1743);
+    			add_location(select, file$2, 61, 2, 1676);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, select, anchor);
@@ -1429,14 +1429,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(64:34) ",
+    		source: "(61:34) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (61:30) 
+    // (58:30) 
     function create_if_block_1(ctx) {
     	let numbericinput;
     	let updating_value;
@@ -1446,8 +1446,8 @@ var app = (function () {
     	let mounted;
     	let dispose;
 
-    	function numbericinput_value_binding(value) {
-    		/*numbericinput_value_binding*/ ctx[7](value);
+    	function numbericinput_value_binding_1(value) {
+    		/*numbericinput_value_binding_1*/ ctx[7](value);
     	}
 
     	let numbericinput_props = { step: 0.5 };
@@ -1461,7 +1461,7 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	binding_callbacks.push(() => bind(numbericinput, 'value', numbericinput_value_binding));
+    	binding_callbacks.push(() => bind(numbericinput, 'value', numbericinput_value_binding_1));
 
     	const block = {
     		c: function create() {
@@ -1470,7 +1470,7 @@ var app = (function () {
     			input = element("input");
     			attr_dev(input, "type", "color");
     			attr_dev(input, "class", "svelte-1apvort");
-    			add_location(input, file$2, 62, 2, 1657);
+    			add_location(input, file$2, 59, 2, 1590);
     		},
     		m: function mount(target, anchor) {
     			mount_component(numbericinput, target, anchor);
@@ -1480,7 +1480,7 @@ var app = (function () {
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[8]);
+    				dispose = listen_dev(input, "input", /*input_input_handler_1*/ ctx[8]);
     				mounted = true;
     			}
     		},
@@ -1521,65 +1521,90 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(61:30) ",
+    		source: "(58:30) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (58:0) {#if step.type == "text"}
+    // (55:0) {#if step.type == "text"}
     function create_if_block$2(ctx) {
-    	let input0;
+    	let input;
     	let t;
-    	let input1;
+    	let numbericinput;
+    	let updating_value;
+    	let current;
     	let mounted;
     	let dispose;
 
+    	function numbericinput_value_binding(value) {
+    		/*numbericinput_value_binding*/ ctx[6](value);
+    	}
+
+    	let numbericinput_props = {};
+
+    	if (/*step*/ ctx[0].fontSize !== void 0) {
+    		numbericinput_props.value = /*step*/ ctx[0].fontSize;
+    	}
+
+    	numbericinput = new NumbericInput({
+    			props: numbericinput_props,
+    			$$inline: true
+    		});
+
+    	binding_callbacks.push(() => bind(numbericinput, 'value', numbericinput_value_binding));
+
     	const block = {
     		c: function create() {
-    			input0 = element("input");
+    			input = element("input");
     			t = space();
-    			input1 = element("input");
-    			attr_dev(input0, "class", "svelte-1apvort");
-    			add_location(input0, file$2, 58, 2, 1478);
-    			attr_dev(input1, "type", "number");
-    			attr_dev(input1, "class", "svelte-1apvort");
-    			add_location(input1, file$2, 59, 2, 1515);
+    			create_component(numbericinput.$$.fragment);
+    			attr_dev(input, "class", "svelte-1apvort");
+    			add_location(input, file$2, 55, 2, 1417);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, input0, anchor);
-    			set_input_value(input0, /*step*/ ctx[0].value);
+    			insert_dev(target, input, anchor);
+    			set_input_value(input, /*step*/ ctx[0].value);
     			insert_dev(target, t, anchor);
-    			insert_dev(target, input1, anchor);
-    			set_input_value(input1, /*step*/ ctx[0].fontSize);
+    			mount_component(numbericinput, target, anchor);
+    			current = true;
 
     			if (!mounted) {
-    				dispose = [
-    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[5]),
-    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[6])
-    				];
-
+    				dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[5]);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*step*/ 1 && input0.value !== /*step*/ ctx[0].value) {
-    				set_input_value(input0, /*step*/ ctx[0].value);
+    			if (dirty & /*step*/ 1 && input.value !== /*step*/ ctx[0].value) {
+    				set_input_value(input, /*step*/ ctx[0].value);
     			}
 
-    			if (dirty & /*step*/ 1 && to_number(input1.value) !== /*step*/ ctx[0].fontSize) {
-    				set_input_value(input1, /*step*/ ctx[0].fontSize);
+    			const numbericinput_changes = {};
+
+    			if (!updating_value && dirty & /*step*/ 1) {
+    				updating_value = true;
+    				numbericinput_changes.value = /*step*/ ctx[0].fontSize;
+    				add_flush_callback(() => updating_value = false);
     			}
+
+    			numbericinput.$set(numbericinput_changes);
     		},
-    		i: noop,
-    		o: noop,
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(numbericinput.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(numbericinput.$$.fragment, local);
+    			current = false;
+    		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(input0);
+    			if (detaching) detach_dev(input);
     			if (detaching) detach_dev(t);
-    			if (detaching) detach_dev(input1);
+    			destroy_component(numbericinput, detaching);
     			mounted = false;
-    			run_all(dispose);
+    			dispose();
     		}
     	};
 
@@ -1587,14 +1612,14 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(58:0) {#if step.type == \\\"text\\\"}",
+    		source: "(55:0) {#if step.type == \\\"text\\\"}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (66:4) {#each functions as func}
+    // (63:4) {#each functions as func}
     function create_each_block$2(ctx) {
     	let option;
     	let t_value = /*func*/ ctx[14].name + "";
@@ -1607,7 +1632,7 @@ var app = (function () {
     			t = text(t_value);
     			option.__value = option_value_value = /*func*/ ctx[14].name;
     			option.value = option.__value;
-    			add_location(option, file$2, 66, 6, 1817);
+    			add_location(option, file$2, 63, 6, 1750);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -1630,7 +1655,7 @@ var app = (function () {
     		block,
     		id: create_each_block$2.name,
     		type: "each",
-    		source: "(66:4) {#each functions as func}",
+    		source: "(63:4) {#each functions as func}",
     		ctx
     	});
 
@@ -1699,27 +1724,27 @@ var app = (function () {
     			button.textContent = "delete";
     			option0.__value = "move";
     			option0.value = option0.__value;
-    			add_location(option0, file$2, 50, 2, 1282);
+    			add_location(option0, file$2, 47, 2, 1221);
     			option1.__value = "draw";
     			option1.value = option1.__value;
-    			add_location(option1, file$2, 51, 2, 1307);
+    			add_location(option1, file$2, 48, 2, 1246);
     			option2.__value = "rotate";
     			option2.value = option2.__value;
-    			add_location(option2, file$2, 52, 2, 1332);
+    			add_location(option2, file$2, 49, 2, 1271);
     			option3.__value = "text";
     			option3.value = option3.__value;
-    			add_location(option3, file$2, 53, 2, 1359);
+    			add_location(option3, file$2, 50, 2, 1298);
     			option4.__value = "repeat";
     			option4.value = option4.__value;
-    			add_location(option4, file$2, 54, 2, 1384);
+    			add_location(option4, file$2, 51, 2, 1323);
     			option5.__value = "function";
     			option5.value = option5.__value;
-    			add_location(option5, file$2, 55, 2, 1411);
+    			add_location(option5, file$2, 52, 2, 1350);
     			attr_dev(select, "class", "svelte-1apvort");
     			if (/*step*/ ctx[0].type === void 0) add_render_callback(() => /*select_change_handler*/ ctx[4].call(select));
-    			add_location(select, file$2, 49, 0, 1223);
+    			add_location(select, file$2, 46, 0, 1162);
     			attr_dev(button, "class", "svelte-1apvort");
-    			add_location(button, file$2, 77, 0, 2133);
+    			add_location(button, file$2, 74, 0, 2066);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1844,15 +1869,19 @@ var app = (function () {
     			$$invalidate(0, step = { type: "repeat", times: 1, steps: [] });
     		} else if (step.type == "function") {
     			$$invalidate(0, step = { type: step.type, function: null });
-    		} else if (step.type == "text" && !step.value) {
-    			$$invalidate(0, step = { type: step.type, value: "", fontSize: 10 });
+    		} else if (step.type == "text") {
+    			$$invalidate(0, step = {
+    				type: step.type,
+    				value: "text",
+    				fontSize: 10
+    			});
     		} else if (step.type == "draw" && !step.color) {
     			$$invalidate(0, step = {
     				type: step.type,
     				value: step.value || 0,
     				color: "000000"
     			});
-    		} else if (step.type != "repeat" && step.type != "text" && step.type != "draw" && !step.value) {
+    		} else if (step.type != "repeat" && step.type != "draw" && !step.value) {
     			$$invalidate(0, step = { type: step.type, value: 0 });
     		}
     	}
@@ -1878,31 +1907,16 @@ var app = (function () {
     		$$invalidate(0, step);
     	}
 
-    	function input0_input_handler() {
+    	function input_input_handler() {
     		step.value = this.value;
     		$$invalidate(0, step);
     	}
 
-    	function input1_input_handler() {
-    		step.fontSize = to_number(this.value);
-    		$$invalidate(0, step);
-    	}
-
     	function numbericinput_value_binding(value) {
-    		if ($$self.$$.not_equal(step.value, value)) {
-    			step.value = value;
+    		if ($$self.$$.not_equal(step.fontSize, value)) {
+    			step.fontSize = value;
     			$$invalidate(0, step);
     		}
-    	}
-
-    	function input_input_handler() {
-    		step.color = this.value;
-    		$$invalidate(0, step);
-    	}
-
-    	function select_change_handler_1() {
-    		step.function = select_value(this);
-    		$$invalidate(0, step);
     	}
 
     	function numbericinput_value_binding_1(value) {
@@ -1912,7 +1926,24 @@ var app = (function () {
     		}
     	}
 
+    	function input_input_handler_1() {
+    		step.color = this.value;
+    		$$invalidate(0, step);
+    	}
+
+    	function select_change_handler_1() {
+    		step.function = select_value(this);
+    		$$invalidate(0, step);
+    	}
+
     	function numbericinput_value_binding_2(value) {
+    		if ($$self.$$.not_equal(step.value, value)) {
+    			step.value = value;
+    			$$invalidate(0, step);
+    		}
+    	}
+
+    	function numbericinput_value_binding_3(value) {
     		if ($$self.$$.not_equal(step.times, value)) {
     			step.times = value;
     			$$invalidate(0, step);
@@ -1958,13 +1989,13 @@ var app = (function () {
     		requestDeletion,
     		typeChanged,
     		select_change_handler,
-    		input0_input_handler,
-    		input1_input_handler,
-    		numbericinput_value_binding,
     		input_input_handler,
-    		select_change_handler_1,
+    		numbericinput_value_binding,
     		numbericinput_value_binding_1,
+    		input_input_handler_1,
+    		select_change_handler_1,
     		numbericinput_value_binding_2,
+    		numbericinput_value_binding_3,
     		codebuilder_steps_binding
     	];
     }
@@ -2412,7 +2443,10 @@ var app = (function () {
 
     let textStep = (step, currentState, functions, time, ctx) => {
         if (ctx) {
-            ctx.font = `${step.fontSize}px sans-serif`;
+            let stepValue = typeof step.fontSize == "number"
+                ? step.fontSize
+                : (step.fontSize.max - step.fontSize.min) * (time / 100.0) + step.fontSize.min;
+            ctx.font = `${stepValue}px sans-serif`;
             let measurement = ctx.measureText(step.value);
             let actualHeight = measurement.actualBoundingBoxAscent +
                 measurement.actualBoundingBoxDescent;
@@ -2421,11 +2455,14 @@ var app = (function () {
         return Object.assign({}, currentState);
     };
     let moveStep = (step, currentState, functions, time, ctx) => {
+        let stepValue = typeof step.value == "number"
+            ? step.value
+            : (step.value.max - step.value.min) * (time / 100.0) + step.value.min;
         let nextPoint = {
             x: currentState.point.x +
-                Math.cos(degToRad(currentState.heading)) * (step.value.min || step.value),
+                Math.cos(degToRad(currentState.heading)) * stepValue,
             y: currentState.point.y +
-                Math.sin(degToRad(currentState.heading)) * (step.value.min || step.value),
+                Math.sin(degToRad(currentState.heading)) * stepValue,
         };
         return Object.assign(Object.assign({}, currentState), { point: nextPoint, boundries: {
                 min: {
@@ -2475,8 +2512,11 @@ var app = (function () {
         return Object.assign(Object.assign({}, currentState), { heading: newHeading });
     };
     let repeatStep = (step, currentState, functions, time, ctx) => {
+        let stepValue = typeof step.times == "number"
+            ? step.times
+            : (step.times.max - step.times.min) * (time / 100.0) + step.times.min;
         let newState = Object.assign({}, currentState);
-        for (let i = 0; i < (step.times.min || step.times); i++) {
+        for (let i = 0; i < stepValue; i++) {
             newState = evaluateCode(ctx, newState, step.steps, functions, time);
         }
         return newState;
@@ -2516,14 +2556,14 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[18] = list[i];
+    	child_ctx[17] = list[i];
     	return child_ctx;
     }
 
-    // (136:6) {#each code.functions as func}
+    // (131:6) {#each code.functions as func}
     function create_each_block(ctx) {
     	let option;
-    	let t_value = /*func*/ ctx[18].name + "";
+    	let t_value = /*func*/ ctx[17].name + "";
     	let t;
     	let option_value_value;
 
@@ -2531,18 +2571,18 @@ var app = (function () {
     		c: function create() {
     			option = element("option");
     			t = text(t_value);
-    			option.__value = option_value_value = /*func*/ ctx[18];
+    			option.__value = option_value_value = /*func*/ ctx[17];
     			option.value = option.__value;
-    			add_location(option, file, 136, 8, 3944);
+    			add_location(option, file, 131, 8, 3819);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
     			append_dev(option, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*code*/ 1 && t_value !== (t_value = /*func*/ ctx[18].name + "")) set_data_dev(t, t_value);
+    			if (dirty & /*code*/ 1 && t_value !== (t_value = /*func*/ ctx[17].name + "")) set_data_dev(t, t_value);
 
-    			if (dirty & /*code*/ 1 && option_value_value !== (option_value_value = /*func*/ ctx[18])) {
+    			if (dirty & /*code*/ 1 && option_value_value !== (option_value_value = /*func*/ ctx[17])) {
     				prop_dev(option, "__value", option_value_value);
     				option.value = option.__value;
     			}
@@ -2556,21 +2596,21 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(136:6) {#each code.functions as func}",
+    		source: "(131:6) {#each code.functions as func}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (140:4) {#if selectedFunction}
+    // (135:4) {#if selectedFunction}
     function create_if_block(ctx) {
     	let codebuilder;
     	let updating_steps;
     	let current;
 
     	function codebuilder_steps_binding_1(value) {
-    		/*codebuilder_steps_binding_1*/ ctx[13](value);
+    		/*codebuilder_steps_binding_1*/ ctx[12](value);
     	}
 
     	let codebuilder_props = { functions: /*code*/ ctx[0].functions };
@@ -2620,7 +2660,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(140:4) {#if selectedFunction}",
+    		source: "(135:4) {#if selectedFunction}",
     		ctx
     	});
 
@@ -2642,28 +2682,21 @@ var app = (function () {
     	let updating_steps;
     	let t5;
     	let section1;
-    	let h20;
+    	let h2;
     	let t7;
-    	let pre;
-    	let t8_value = JSON.stringify(/*animatables*/ ctx[6]) + "";
+    	let select;
     	let t8;
     	let t9;
-    	let section2;
-    	let h21;
-    	let t11;
-    	let select;
-    	let t12;
-    	let t13;
     	let form;
     	let input1;
-    	let t14;
+    	let t10;
     	let button1;
     	let current;
     	let mounted;
     	let dispose;
 
     	function codebuilder_steps_binding(value) {
-    		/*codebuilder_steps_binding*/ ctx[11](value);
+    		/*codebuilder_steps_binding*/ ctx[10](value);
     	}
 
     	let codebuilder_props = { functions: /*code*/ ctx[0].functions };
@@ -2700,54 +2733,43 @@ var app = (function () {
     			create_component(codebuilder.$$.fragment);
     			t5 = space();
     			section1 = element("section");
-    			h20 = element("h2");
-    			h20.textContent = "Animate";
+    			h2 = element("h2");
+    			h2.textContent = "functions";
     			t7 = space();
-    			pre = element("pre");
-    			t8 = text(t8_value);
-    			t9 = space();
-    			section2 = element("section");
-    			h21 = element("h2");
-    			h21.textContent = "functions";
-    			t11 = space();
     			select = element("select");
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
 
-    			t12 = space();
+    			t8 = space();
     			if (if_block) if_block.c();
-    			t13 = space();
+    			t9 = space();
     			form = element("form");
     			input1 = element("input");
-    			t14 = space();
+    			t10 = space();
     			button1 = element("button");
     			button1.textContent = "create";
     			attr_dev(canvas_1, "id", "canvas");
     			attr_dev(canvas_1, "class", "svelte-1snv1ja");
-    			add_location(canvas_1, file, 120, 2, 3419);
-    			add_location(button0, file, 121, 2, 3464);
+    			add_location(canvas_1, file, 119, 2, 3389);
+    			add_location(button0, file, 120, 2, 3434);
     			attr_dev(input0, "type", "checkbox");
-    			add_location(input0, file, 124, 19, 3569);
-    			add_location(label, file, 123, 4, 3542);
+    			add_location(input0, file, 123, 19, 3539);
+    			add_location(label, file, 122, 4, 3512);
     			attr_dev(section0, "class", "svelte-1snv1ja");
-    			add_location(section0, file, 122, 2, 3527);
-    			add_location(h20, file, 129, 4, 3739);
-    			add_location(pre, file, 130, 4, 3761);
-    			attr_dev(section1, "class", "svelte-1snv1ja");
-    			add_location(section1, file, 128, 2, 3724);
-    			add_location(h21, file, 133, 4, 3834);
-    			if (/*selectedFunction*/ ctx[4] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[12].call(select));
-    			add_location(select, file, 134, 4, 3858);
-    			add_location(input1, file, 146, 6, 4224);
+    			add_location(section0, file, 121, 2, 3497);
+    			add_location(h2, file, 128, 4, 3709);
+    			if (/*selectedFunction*/ ctx[4] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[11].call(select));
+    			add_location(select, file, 129, 4, 3733);
+    			add_location(input1, file, 141, 6, 4099);
     			attr_dev(button1, "type", "submit");
-    			add_location(button1, file, 147, 6, 4270);
-    			add_location(form, file, 145, 4, 4171);
-    			attr_dev(section2, "class", "svelte-1snv1ja");
-    			add_location(section2, file, 132, 2, 3819);
+    			add_location(button1, file, 142, 6, 4145);
+    			add_location(form, file, 140, 4, 4046);
+    			attr_dev(section1, "class", "svelte-1snv1ja");
+    			add_location(section1, file, 127, 2, 3694);
     			attr_dev(main, "class", "svelte-1snv1ja");
-    			add_location(main, file, 119, 0, 3409);
+    			add_location(main, file, 118, 0, 3379);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2755,7 +2777,7 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
     			append_dev(main, canvas_1);
-    			/*canvas_1_binding*/ ctx[8](canvas_1);
+    			/*canvas_1_binding*/ ctx[7](canvas_1);
     			append_dev(main, t0);
     			append_dev(main, button0);
     			append_dev(main, t2);
@@ -2768,15 +2790,9 @@ var app = (function () {
     			mount_component(codebuilder, section0, null);
     			append_dev(main, t5);
     			append_dev(main, section1);
-    			append_dev(section1, h20);
+    			append_dev(section1, h2);
     			append_dev(section1, t7);
-    			append_dev(section1, pre);
-    			append_dev(pre, t8);
-    			append_dev(main, t9);
-    			append_dev(main, section2);
-    			append_dev(section2, h21);
-    			append_dev(section2, t11);
-    			append_dev(section2, select);
+    			append_dev(section1, select);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				if (each_blocks[i]) {
@@ -2785,23 +2801,23 @@ var app = (function () {
     			}
 
     			select_option(select, /*selectedFunction*/ ctx[4], true);
-    			append_dev(section2, t12);
-    			if (if_block) if_block.m(section2, null);
-    			append_dev(section2, t13);
-    			append_dev(section2, form);
+    			append_dev(section1, t8);
+    			if (if_block) if_block.m(section1, null);
+    			append_dev(section1, t9);
+    			append_dev(section1, form);
     			append_dev(form, input1);
     			set_input_value(input1, /*newFunctionName*/ ctx[5]);
-    			append_dev(form, t14);
+    			append_dev(form, t10);
     			append_dev(form, button1);
     			current = true;
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(button0, "click", /*click_handler*/ ctx[9], false, false, false, false),
-    					listen_dev(input0, "change", /*input0_change_handler*/ ctx[10]),
-    					listen_dev(select, "change", /*select_change_handler*/ ctx[12]),
-    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[14]),
-    					listen_dev(form, "submit", prevent_default(/*addFunction*/ ctx[7]), false, true, false, false)
+    					listen_dev(button0, "click", /*click_handler*/ ctx[8], false, false, false, false),
+    					listen_dev(input0, "change", /*input0_change_handler*/ ctx[9]),
+    					listen_dev(select, "change", /*select_change_handler*/ ctx[11]),
+    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[13]),
+    					listen_dev(form, "submit", prevent_default(/*addFunction*/ ctx[6]), false, true, false, false)
     				];
 
     				mounted = true;
@@ -2822,7 +2838,6 @@ var app = (function () {
     			}
 
     			codebuilder.$set(codebuilder_changes);
-    			if ((!current || dirty & /*animatables*/ 64) && t8_value !== (t8_value = JSON.stringify(/*animatables*/ ctx[6]) + "")) set_data_dev(t8, t8_value);
 
     			if (dirty & /*code*/ 1) {
     				each_value = /*code*/ ctx[0].functions;
@@ -2863,7 +2878,7 @@ var app = (function () {
     					if_block = create_if_block(ctx);
     					if_block.c();
     					transition_in(if_block, 1);
-    					if_block.m(section2, t13);
+    					if_block.m(section1, t9);
     				}
     			} else if (if_block) {
     				group_outros();
@@ -2892,7 +2907,7 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(main);
-    			/*canvas_1_binding*/ ctx[8](null);
+    			/*canvas_1_binding*/ ctx[7](null);
     			destroy_component(codebuilder);
     			destroy_each(each_blocks, detaching);
     			if (if_block) if_block.d();
@@ -2913,7 +2928,6 @@ var app = (function () {
     }
 
     function instance($$self, $$props, $$invalidate) {
-    	let animatables;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
     	let savedCode = localStorage.getItem("prog-playground_code");
@@ -3093,8 +3107,7 @@ var app = (function () {
     		drawCode,
     		selectedFunction,
     		newFunctionName,
-    		addFunction,
-    		animatables
+    		addFunction
     	});
 
     	$$self.$inject_state = $$props => {
@@ -3105,18 +3118,11 @@ var app = (function () {
     		if ('play' in $$props) $$invalidate(3, play = $$props.play);
     		if ('selectedFunction' in $$props) $$invalidate(4, selectedFunction = $$props.selectedFunction);
     		if ('newFunctionName' in $$props) $$invalidate(5, newFunctionName = $$props.newFunctionName);
-    		if ('animatables' in $$props) $$invalidate(6, animatables = $$props.animatables);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
-
-    	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*code*/ 1) {
-    			$$invalidate(6, animatables = code.steps);
-    		}
-    	};
 
     	return [
     		code,
@@ -3125,7 +3131,6 @@ var app = (function () {
     		play,
     		selectedFunction,
     		newFunctionName,
-    		animatables,
     		addFunction,
     		canvas_1_binding,
     		click_handler,

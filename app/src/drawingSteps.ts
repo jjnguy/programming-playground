@@ -39,7 +39,11 @@ export let textStep = (
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     if (ctx) {
-        ctx.font = `${step.fontSize}px sans-serif`;
+        let stepValue = typeof step.fontSize == "number"
+            ? step.fontSize
+            : (step.fontSize.max - step.fontSize.min) * (time / 100.0) + step.fontSize.min;
+
+        ctx.font = `${stepValue}px sans-serif`;
         let measurement = ctx.measureText(step.value);
         let actualHeight =
             measurement.actualBoundingBoxAscent +
@@ -60,13 +64,18 @@ export let moveStep = (
     time: number,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
+
+    let stepValue = typeof step.value == "number"
+        ? step.value
+        : (step.value.max - step.value.min) * (time / 100.0) + step.value.min;
+
     let nextPoint = {
         x:
             currentState.point.x +
-            Math.cos(degToRad(currentState.heading)) * (step.value.min || step.value),
+            Math.cos(degToRad(currentState.heading)) * stepValue,
         y:
             currentState.point.y +
-            Math.sin(degToRad(currentState.heading)) * (step.value.min || step.value),
+            Math.sin(degToRad(currentState.heading)) * stepValue,
     };
 
     return {
@@ -155,8 +164,13 @@ export let repeatStep = (
     time: number,
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
+
+    let stepValue = typeof step.times == "number"
+        ? step.times
+        : (step.times.max - step.times.min) * (time / 100.0) + step.times.min;
+
     let newState = { ...currentState };
-    for (let i = 0; i < (step.times.min || step.times); i++) {
+    for (let i = 0; i < stepValue; i++) {
         newState = evaluateCode(ctx, newState, step.steps, functions, time);
     }
 

@@ -152,8 +152,6 @@
       },
     ];
   }
-
-  $: animatables = code.steps;
 </script>
 
 <main>
@@ -164,10 +162,6 @@
       >Auto Center <input type="checkbox" bind:checked={autoCenter} /></label
     >
     <CodeBuilder bind:steps={code.steps} functions={code.functions} />
-  </section>
-  <section>
-    <h2>Animate</h2>
-    <pre>{JSON.stringify(animatables)}</pre>
   </section>
   <section>
     <h2>functions</h2>
