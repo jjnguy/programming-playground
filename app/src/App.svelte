@@ -92,8 +92,6 @@
 
     stepTime(elapsed);
 
-    console.log(elapsed);
-
     if (play) {
       requestAnimationFrame(drawCode);
     }

@@ -165,6 +165,10 @@ export let repeatStep = (
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
 
+    if (step.times === undefined) {
+        return currentState;
+    }
+
     let stepValue = typeof step.times == "number"
         ? step.times
         : (step.times.max - step.times.min) * (time / 100.0) + step.times.min;

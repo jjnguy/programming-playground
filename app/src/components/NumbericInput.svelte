@@ -16,12 +16,13 @@
             };
         }
     }
+    console.log(value);
 </script>
 
 {#if typeof value == "number"}
     <Stepper bind:value {step} {min} {max} />
     <button on:click={makeAnimatable}>animate</button>
-{:else}
+{:else if value !== undefined}
     <Stepper bind:value={value.min} {step} {min} {max} />
     to
     <Stepper bind:value={value.max} {step} {min} {max} />
