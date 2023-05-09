@@ -2556,14 +2556,14 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[17] = list[i];
+    	child_ctx[22] = list[i];
     	return child_ctx;
     }
 
-    // (131:6) {#each code.functions as func}
+    // (150:6) {#each code.functions as func}
     function create_each_block(ctx) {
     	let option;
-    	let t_value = /*func*/ ctx[17].name + "";
+    	let t_value = /*func*/ ctx[22].name + "";
     	let t;
     	let option_value_value;
 
@@ -2571,18 +2571,18 @@ var app = (function () {
     		c: function create() {
     			option = element("option");
     			t = text(t_value);
-    			option.__value = option_value_value = /*func*/ ctx[17];
+    			option.__value = option_value_value = /*func*/ ctx[22];
     			option.value = option.__value;
-    			add_location(option, file, 131, 8, 3819);
+    			add_location(option, file, 150, 8, 4296);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
     			append_dev(option, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*code*/ 1 && t_value !== (t_value = /*func*/ ctx[17].name + "")) set_data_dev(t, t_value);
+    			if (dirty & /*code*/ 1 && t_value !== (t_value = /*func*/ ctx[22].name + "")) set_data_dev(t, t_value);
 
-    			if (dirty & /*code*/ 1 && option_value_value !== (option_value_value = /*func*/ ctx[17])) {
+    			if (dirty & /*code*/ 1 && option_value_value !== (option_value_value = /*func*/ ctx[22])) {
     				prop_dev(option, "__value", option_value_value);
     				option.value = option.__value;
     			}
@@ -2596,14 +2596,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(131:6) {#each code.functions as func}",
+    		source: "(150:6) {#each code.functions as func}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (135:4) {#if selectedFunction}
+    // (154:4) {#if selectedFunction}
     function create_if_block(ctx) {
     	let codebuilder;
     	let updating_steps;
@@ -2660,7 +2660,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(135:4) {#if selectedFunction}",
+    		source: "(154:4) {#if selectedFunction}",
     		ctx
     	});
 
@@ -2752,24 +2752,24 @@ var app = (function () {
     			button1.textContent = "create";
     			attr_dev(canvas_1, "id", "canvas");
     			attr_dev(canvas_1, "class", "svelte-1snv1ja");
-    			add_location(canvas_1, file, 119, 2, 3389);
-    			add_location(button0, file, 120, 2, 3434);
+    			add_location(canvas_1, file, 138, 2, 3866);
+    			add_location(button0, file, 139, 2, 3911);
     			attr_dev(input0, "type", "checkbox");
-    			add_location(input0, file, 123, 19, 3539);
-    			add_location(label, file, 122, 4, 3512);
+    			add_location(input0, file, 142, 19, 4016);
+    			add_location(label, file, 141, 4, 3989);
     			attr_dev(section0, "class", "svelte-1snv1ja");
-    			add_location(section0, file, 121, 2, 3497);
-    			add_location(h2, file, 128, 4, 3709);
+    			add_location(section0, file, 140, 2, 3974);
+    			add_location(h2, file, 147, 4, 4186);
     			if (/*selectedFunction*/ ctx[4] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[11].call(select));
-    			add_location(select, file, 129, 4, 3733);
-    			add_location(input1, file, 141, 6, 4099);
+    			add_location(select, file, 148, 4, 4210);
+    			add_location(input1, file, 160, 6, 4576);
     			attr_dev(button1, "type", "submit");
-    			add_location(button1, file, 142, 6, 4145);
-    			add_location(form, file, 140, 4, 4046);
+    			add_location(button1, file, 161, 6, 4622);
+    			add_location(form, file, 159, 4, 4523);
     			attr_dev(section1, "class", "svelte-1snv1ja");
-    			add_location(section1, file, 127, 2, 3694);
+    			add_location(section1, file, 146, 2, 4171);
     			attr_dev(main, "class", "svelte-1snv1ja");
-    			add_location(main, file, 118, 0, 3379);
+    			add_location(main, file, 137, 0, 3856);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2927,6 +2927,14 @@ var app = (function () {
     	return block;
     }
 
+    function easeInOutQuint(n) {
+    	let x = n / 100.0;
+
+    	return x < 0.5
+    	? 16 * x * x * x * x * x
+    	: 1 - Math.pow(-2 * x + 2, 5) / 2;
+    }
+
     function instance($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
@@ -2965,12 +2973,30 @@ var app = (function () {
 
     	let autoCenter = true;
     	let play = false;
+    	let time = 0;
+    	let sign = 1;
 
-    	function drawCode(time) {
-    		console.log(time);
+    	function stepTime(elapsed) {
+    		time += sign;
+
+    		if (time == 100 || time == 0) {
+    			sign *= -1;
+    		}
+    	}
+
+    	let start, previousTimeStamp;
+
+    	function drawCode(timestamp) {
+    		if (start === undefined) {
+    			start = timestamp;
+    		}
+
+    		const elapsed = timestamp - start;
+    		stepTime();
+    		console.log(elapsed);
 
     		if (play) {
-    			requestAnimationFrame(_ => drawCode((time + 1) % 100));
+    			requestAnimationFrame(drawCode);
     		}
 
     		let ctx = canvas.getContext("2d");
@@ -2990,12 +3016,14 @@ var app = (function () {
     			boundries: { min: canvasCenter, max: canvasCenter }
     		};
 
+    		let eased = easeInOutQuint(time) * 100;
+
     		if (!autoCenter) {
-    			evaluateCode(ctx, initialState, code.steps, code.functions, time);
+    			evaluateCode(ctx, initialState, code.steps, code.functions, eased);
     			return;
     		}
 
-    		let finalState = calculateBoundries(initialState, code.steps, time);
+    		let finalState = calculateBoundries(initialState, code.steps, eased);
 
     		let centerOfResult = {
     			x: (finalState.boundries.max.x + finalState.boundries.min.x) / 2,
@@ -3021,7 +3049,7 @@ var app = (function () {
     			},
     			code.steps,
     			code.functions,
-    			time
+    			eased
     		);
     	}
 
@@ -3104,6 +3132,12 @@ var app = (function () {
     		calculateBoundries,
     		autoCenter,
     		play,
+    		time,
+    		sign,
+    		stepTime,
+    		easeInOutQuint,
+    		start,
+    		previousTimeStamp,
     		drawCode,
     		selectedFunction,
     		newFunctionName,
@@ -3116,6 +3150,10 @@ var app = (function () {
     		if ('canvas' in $$props) $$invalidate(1, canvas = $$props.canvas);
     		if ('autoCenter' in $$props) $$invalidate(2, autoCenter = $$props.autoCenter);
     		if ('play' in $$props) $$invalidate(3, play = $$props.play);
+    		if ('time' in $$props) time = $$props.time;
+    		if ('sign' in $$props) sign = $$props.sign;
+    		if ('start' in $$props) start = $$props.start;
+    		if ('previousTimeStamp' in $$props) previousTimeStamp = $$props.previousTimeStamp;
     		if ('selectedFunction' in $$props) $$invalidate(4, selectedFunction = $$props.selectedFunction);
     		if ('newFunctionName' in $$props) $$invalidate(5, newFunctionName = $$props.newFunctionName);
     	};

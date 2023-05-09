@@ -69,11 +69,33 @@
 
   let play = false;
 
-  function drawCode(time) {
-    console.log(time);
+  let time = 0;
+  let sign = 1;
+  function stepTime(elapsed: number) {
+    time += sign;
+    if (time == 100 || time == 0) {
+      sign *= -1;
+    }
+  }
+
+  function easeInOutQuint(n: number): number {
+    let x = n / 100.0;
+    return x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
+  }
+
+  let start, previousTimeStamp;
+  function drawCode(timestamp) {
+    if (start === undefined) {
+      start = timestamp;
+    }
+    const elapsed = timestamp - start;
+
+    stepTime(elapsed);
+
+    console.log(elapsed);
 
     if (play) {
-      requestAnimationFrame((_) => drawCode((time + 1) % 100));
+      requestAnimationFrame(drawCode);
     }
 
     let ctx = canvas.getContext("2d");
@@ -91,12 +113,14 @@
       },
     };
 
+    let eased = easeInOutQuint(time) * 100;
+
     if (!autoCenter) {
-      evaluateCode(ctx, initialState, code.steps, code.functions, time);
+      evaluateCode(ctx, initialState, code.steps, code.functions, eased);
       return;
     }
 
-    let finalState = calculateBoundries(initialState, code.steps, time);
+    let finalState = calculateBoundries(initialState, code.steps, eased);
 
     let centerOfResult = {
       x: (finalState.boundries.max.x + finalState.boundries.min.x) / 2,
@@ -122,7 +146,7 @@
       },
       code.steps,
       code.functions,
-      time
+      eased
     );
   }
 
