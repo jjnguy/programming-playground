@@ -39,8 +39,8 @@ export let textStep = (
     ctx?: CanvasRenderingContext2D
 ): DrawingState => {
     if (ctx) {
-        let stepValue = typeof step.fontSize == "number"
-            ? step.fontSize
+        let stepValue = typeof step.fontSize == "number" || step.fontSize == undefined
+            ? step.fontSize ?? 10
             : (step.fontSize.max - step.fontSize.min) * (time / 100.0) + step.fontSize.min;
 
         ctx.font = `${stepValue}px sans-serif`;
