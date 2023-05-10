@@ -8,7 +8,7 @@
   let parms = new URLSearchParams(window.location.search);
   if (parms.has("code")) {
     localStorage.setItem("prog-playground_code", atob(parms.get("code")));
-    window.history.replaceState(null, null, "/");
+    window.history.replaceState(null, null, `/${window.location.pathname}`);
   }
 
   let savedCode = localStorage.getItem("prog-playground_code");
