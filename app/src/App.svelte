@@ -5,6 +5,12 @@
   import type { DrawingState } from "./drawingSteps";
   import { evaluateCode, stepExecutors } from "./drawing";
 
+  let parms = new URLSearchParams(window.location.search);
+  if (parms.has("code")) {
+    localStorage.setItem("prog-playground_code", atob(parms.get("code")));
+    window.history.replaceState(null, null, "/");
+  }
+
   let savedCode = localStorage.getItem("prog-playground_code");
 
   let code: Code = savedCode
@@ -73,7 +79,7 @@
   let sign = 1;
   function stepTime(elapsed: number) {
     time += sign;
-    if (time == 100 || time == 0) {
+    if (time == 99 || time == 0) {
       sign *= -1;
     }
   }
@@ -83,7 +89,7 @@
     return x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
   }
 
-  let start, previousTimeStamp;
+  let start;
   function drawCode(timestamp) {
     if (start === undefined) {
       start = timestamp;
@@ -159,6 +165,7 @@
   });
 
   afterUpdate(() => {
+    start = undefined;
     localStorage.setItem("prog-playground_code", JSON.stringify(code));
     drawCode(0);
   });
@@ -174,11 +181,20 @@
       },
     ];
   }
+
+  function copyLink() {
+    let base = window.location;
+    let encodedCode = btoa(JSON.stringify(code));
+    navigator.clipboard.writeText(`${base}?code=${encodedCode}`);
+  }
 </script>
 
 <main>
   <canvas bind:this={canvas} id="canvas" />
-  <button on:click={() => (play = !play)}>play/pause</button>
+  <section>
+    <button on:click={() => (play = !play)}>play/pause</button>
+    <button on:click={copyLink}>link</button>
+  </section>
   <section>
     <label
       >Auto Center <input type="checkbox" bind:checked={autoCenter} /></label
@@ -224,12 +240,12 @@
 
   @media only screen and (max-width: 800px) {
     canvas {
-      width: 100%;
+      width: 100vw;
       height: 100vw;
       position: fixed;
     }
 
-    section:last-child {
+    section:nth-child(2) {
       margin-top: 100vw;
     }
   }

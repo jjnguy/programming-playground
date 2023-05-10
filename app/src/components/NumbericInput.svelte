@@ -16,7 +16,13 @@
             };
         }
     }
-    console.log(value);
+
+    function removeAnimation() {
+        if (typeof value == "number") {
+            return;
+        }
+        value = (value.min + value.max) / 2;
+    }
 </script>
 
 {#if typeof value == "number"}
@@ -26,4 +32,5 @@
     <Stepper bind:value={value.min} {step} {min} {max} />
     to
     <Stepper bind:value={value.max} {step} {min} {max} />
+    <button on:click={removeAnimation}>static</button>
 {/if}
