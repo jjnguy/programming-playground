@@ -1,5 +1,5 @@
 import { evaluateCode } from "./drawing";
-import type { DrawStep, DrawStepType, FunctionStep, FunctionStepType, NumberStep, NumberStepTypes, RepeatStep, RepeatStepType, Step, StepFunction, TextStep, TextStepTypes } from "./types";
+import type { DrawStep, DrawStepType, DrawStepV2, DrawStepV2Type, FunctionStep, FunctionStepType, NumberStep, NumberStepTypes, RepeatStep, RepeatStepType, Step, StepFunction, TextStep, TextStepTypes } from "./types";
 
 
 export type Boundries = {
@@ -19,7 +19,7 @@ export type DrawingState = {
 };
 
 export type StepExecutorCollection = Map<
-    TextStepTypes | NumberStepTypes | RepeatStepType | DrawStepType | FunctionStepType,
+    TextStepTypes | NumberStepTypes | RepeatStepType | DrawStepType | DrawStepV2Type | FunctionStepType,
     StepExecutor
 >;
 
@@ -116,6 +116,49 @@ export let drawStep = (
     };
     if (ctx) {
         ctx.strokeStyle = step.color;
+        ctx.beginPath();
+        ctx.moveTo(currentState.point.x, currentState.point.y);
+        ctx.lineTo(nextPoint.x, nextPoint.y);
+        ctx.stroke();
+    }
+    return {
+        ...currentState,
+        point: nextPoint,
+        boundries: {
+            min: {
+                x: Math.min(currentState.boundries.min.x, nextPoint.x),
+                y: Math.min(currentState.boundries.min.y, nextPoint.y),
+            },
+            max: {
+                x: Math.max(currentState.boundries.max.x, nextPoint.x),
+                y: Math.max(currentState.boundries.max.y, nextPoint.y),
+            },
+        },
+    };
+};
+
+export let drawStepV2 = (
+    step: DrawStepV2,
+    currentState: DrawingState,
+    functions: Array<StepFunction>,
+    time: number,
+    ctx?: CanvasRenderingContext2D
+): DrawingState => {
+
+    let stepValue = typeof step.value == "number"
+        ? step.value
+        : (step.value.max - step.value.min) * (time / 100.0) + step.value.min;
+
+    let nextPoint = {
+        x:
+            currentState.point.x +
+            Math.cos(degToRad(currentState.heading)) * stepValue,
+        y:
+            currentState.point.y +
+            Math.sin(degToRad(currentState.heading)) * stepValue,
+    };
+    if (ctx && step.brush) {
+        ctx.strokeStyle = step.brush.color;
         ctx.beginPath();
         ctx.moveTo(currentState.point.x, currentState.point.y);
         ctx.lineTo(nextPoint.x, nextPoint.y);

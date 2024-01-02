@@ -1,9 +1,9 @@
-import { moveStep, repeatStep, rotateStep, textStep, functionStep, type DrawingState, type StepExecutorCollection, type StepExecutor, drawStep } from "./drawingSteps";
-import type { DrawStep, DrawStepType, NumberStepTypes, RepeatStepType, Step, StepFunction, TextStepTypes } from "./types";
+import { moveStep, repeatStep, rotateStep, textStep, functionStep, type DrawingState, type StepExecutorCollection, type StepExecutor, drawStep, drawStepV2 } from "./drawingSteps";
+import type { DrawStepType, DrawStepV2Type, NumberStepTypes, RepeatStepType, Step, StepFunction, TextStepTypes } from "./types";
 
 
 export let stepExecutors: StepExecutorCollection = new Map<
-    TextStepTypes | NumberStepTypes | RepeatStepType | DrawStepType,
+    TextStepTypes | NumberStepTypes | RepeatStepType | DrawStepType | DrawStepV2Type,
     StepExecutor
 >();
 
@@ -12,6 +12,8 @@ stepExecutors.set("text", textStep);
 stepExecutors.set("move", moveStep);
 
 stepExecutors.set("draw", drawStep);
+
+stepExecutors.set("draw_2.0", drawStepV2);
 
 stepExecutors.set("rotate", rotateStep);
 

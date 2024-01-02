@@ -12,48 +12,9 @@
   function requestDeletion() {
     dispatch("delete");
   }
-
-  function typeChanged() {
-    if (step.type == "repeat" && !step.times) {
-      step = {
-        type: "repeat",
-        times: 1,
-        steps: [],
-      };
-    } else if (step.type == "function") {
-      step = {
-        type: step.type,
-        function: null,
-      };
-    } else if (step.type == "text") {
-      step = {
-        type: step.type,
-        value: "text",
-        fontSize: 10,
-      };
-    } else if (step.type == "draw" && !step.color) {
-      step = {
-        type: step.type,
-        value: step.value || 0,
-        color: "000000",
-      };
-    } else if (step.type != "repeat" && step.type != "draw" && !step.value) {
-      step = {
-        type: step.type,
-        value: 0,
-      };
-    }
-  }
 </script>
 
-<select bind:value={step.type} on:change={typeChanged}>
-  <option>move</option>
-  <option>draw</option>
-  <option>rotate</option>
-  <option>text</option>
-  <option>repeat</option>
-  <option>function</option>
-</select>
+<div class="step-name">{step.type}</div>
 {#if step.type == "text"}
   <input bind:value={step.value} />
   <NumbericInput bind:value={step.fontSize} />
@@ -79,6 +40,11 @@
 <style lang="less">
   div {
     margin-left: 4rem;
+
+    &.step-name {
+      font-weight: bold;
+      margin-left: 0;
+    }
   }
 
   select {
