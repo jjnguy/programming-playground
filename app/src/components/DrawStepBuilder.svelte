@@ -27,8 +27,8 @@
 <label>
   <span>draw?</span>
   <input type="checkbox" checked={!!step.brush} on:change={handleCheck} />
-  <Stepper bind:value={step.brush.width} min={1} />
 </label>
 {#if step.brush}
   <input type="color" bind:value={step.brush.color} />
+  <Stepper bind:value={step.brush.width} min={1} />
 {/if}

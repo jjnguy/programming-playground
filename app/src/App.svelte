@@ -4,10 +4,11 @@
   import type { Code, Step, StepFunction } from "./types";
   import type { DrawingState } from "./drawingSteps";
   import { evaluateCode, stepExecutors } from "./drawing";
+  import { defaultCode } from "./defaultCode";
 
   let parms = new URLSearchParams(window.location.search);
   if (parms.has("code")) {
-    localStorage.setItem("prog-playground_code", atob(parms.get("code")));
+    localStorage.setItem("prog-playground_code_v2", atob(parms.get("code")));
     window.history.replaceState(
       null,
       null,
@@ -15,37 +16,9 @@
     );
   }
 
-  let savedCode = localStorage.getItem("prog-playground_code");
+  let savedCode = localStorage.getItem("prog-playground_code_v2");
 
-  let code: Code = savedCode
-    ? JSON.parse(savedCode)
-    : {
-        steps: [
-          {
-            type: "repeat",
-            times: 80,
-            steps: [
-              {
-                type: "draw",
-                value: 16,
-                brush: {
-                  color: "#000000",
-                  width: 2,
-                },
-              },
-              {
-                type: "rotate",
-                value: 5,
-              },
-              {
-                type: "text",
-                value: "😊",
-              },
-            ],
-          },
-        ],
-        functions: [],
-      };
+  let code: Code = savedCode ? JSON.parse(savedCode) : defaultCode;
 
   code.functions = code.functions || [];
 
@@ -162,7 +135,7 @@
 
   afterUpdate(() => {
     start = undefined;
-    localStorage.setItem("prog-playground_code", JSON.stringify(code));
+    localStorage.setItem("prog-playground_code_v2", JSON.stringify(code));
     drawCode(0);
   });
 
@@ -195,7 +168,11 @@
     <label
       >Auto Center <input type="checkbox" bind:checked={autoCenter} /></label
     >
-    <CodeBuilder bind:steps={code.steps} functions={code.functions} />
+    <CodeBuilder
+      bind:steps={code.steps}
+      functions={code.functions}
+      editMode={true}
+    />
   </section>
   <section>
     <h2>functions</h2>
@@ -208,6 +185,7 @@
       <CodeBuilder
         bind:steps={selectedFunction.steps}
         functions={code.functions}
+        editMode={true}
       />
     {/if}
     <form on:submit|preventDefault={addFunction}>
@@ -219,42 +197,16 @@
 
 <style lang="less">
   main {
-    display: flex;
-    flex-wrap: wrap;
-    height: 100vh;
-
     canvas {
       z-index: 15;
       background-color: white;
       border: 1px solid black;
+      width: 100vw;
+      height: 100vw;
     }
 
     section:last-child {
       z-index: 0;
-    }
-  }
-
-  @media only screen and (max-width: 800px) {
-    canvas {
-      width: 100vw;
-      height: 100vw;
-      position: fixed;
-    }
-
-    section:nth-child(2) {
-      margin-top: 100vw;
-    }
-  }
-
-  @media only screen and (min-width: 800px) {
-    canvas {
-      width: 500px;
-      height: 500px;
-      position: relative;
-    }
-
-    section:last-child {
-      margin-top: 0;
     }
   }
 </style>

@@ -5,6 +5,7 @@
 
   export let steps: Array<Step>;
   export let functions: Array<StepFunction>;
+  export let editMode: boolean;
 
   function del(ix: number) {
     steps.splice(ix, 1);
@@ -15,16 +16,20 @@
 {#if steps}
   <ol>
     {#each steps as step, ix}
-      <li>
-        <InsertStepButton index={ix} bind:steps />
-      </li>
+      {#if editMode}
+        <li>
+          <InsertStepButton index={ix} bind:steps />
+        </li>
+      {/if}
       <li>
         <StepBuilder on:delete={() => del(ix)} bind:step {functions} />
       </li>
     {/each}
-    <li>
-      <InsertStepButton index={steps.length} bind:steps />
-    </li>
+    {#if editMode}
+      <li>
+        <InsertStepButton index={steps.length} bind:steps />
+      </li>
+    {/if}
   </ol>
 {/if}
 

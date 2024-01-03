@@ -1,4 +1,4 @@
 button.svelte-1tdip3n{padding:0.7rem 1rem}
 input.svelte-a97nfq{width:4.5rem;padding:0.7rem}button.svelte-a97nfq{padding:0.7rem 1rem}
-div.svelte-1c2ie0b{margin-left:4rem}div.step-name.svelte-1c2ie0b{font-weight:bold;margin-left:0}select.svelte-1c2ie0b{padding:0.7rem}input.svelte-1c2ie0b{padding:0.7rem}button.svelte-1c2ie0b{padding:0.7rem 1rem}
-main.svelte-y2606h.svelte-y2606h{display:flex;flex-wrap:wrap;height:100vh}main.svelte-y2606h canvas.svelte-y2606h{z-index:15;background-color:white;border:1px solid black}main.svelte-y2606h section.svelte-y2606h:last-child{z-index:0}@media only screen and (max-width: 800px){canvas.svelte-y2606h.svelte-y2606h{width:100vw;height:100vw;position:fixed}section.svelte-y2606h.svelte-y2606h:nth-child(2){margin-top:100vw}}@media only screen and (min-width: 800px){canvas.svelte-y2606h.svelte-y2606h{width:500px;height:500px;position:relative}section.svelte-y2606h.svelte-y2606h:last-child{margin-top:0}}
+div.steps-container.svelte-umj22u{margin-left:4rem}div.step-name.svelte-umj22u{font-weight:bold;margin-left:0}select.svelte-umj22u{padding:0.7rem}input.svelte-umj22u{padding:0.7rem}button.svelte-umj22u{padding:0.7rem 1rem}
+main.svelte-7nqdiw canvas.svelte-7nqdiw{z-index:15;background-color:white;border:1px solid black;width:100vw;height:100vw}main.svelte-7nqdiw section.svelte-7nqdiw:last-child{z-index:0}
