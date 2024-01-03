@@ -16,30 +16,22 @@ export type AnimatableValue = {
 }
 
 export type TextStepTypes = "text";
-export type NumberStepTypes = "move" | "rotate";
+export type RotateStepType = "rotate";
 
-export type Step = NumberStep | TextStep | RepeatStep | DrawStep | FunctionStep | DrawStepV2;
+export type Step = RotateStep | TextStep | RepeatStep | FunctionStep | DrawStep;
 
-export type NumberStep = {
-  type: NumberStepTypes;
+export type RotateStep = {
+  type: RotateStepType;
   value: number | AnimatableValue;
 }
 
 export type DrawStepType = "draw";
-
-export type DrawStep = {
-  type: DrawStepType;
-  value: number | AnimatableValue;
-  color: string;
-}
-
-export type DrawStepV2Type = "draw_2.0";
 export type Brush = {
   color: string;
-  width: number | AnimatableValue;
+  width: number;
 }
-export type DrawStepV2 = {
-  type: DrawStepV2Type;
+export type DrawStep = {
+  type: DrawStepType;
   value: number | AnimatableValue;
   brush?: Brush;
 }

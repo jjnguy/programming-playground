@@ -5,10 +5,16 @@
   export let max = 332342423;
 
   function increment() {
+    if (value + step > max) {
+      return;
+    }
     value += step;
   }
 
   function decrement() {
+    if (value - step < min) {
+      return;
+    }
     value -= step;
   }
 </script>

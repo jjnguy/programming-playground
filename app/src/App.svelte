@@ -11,7 +11,7 @@
     window.history.replaceState(
       null,
       null,
-      `${window.location.origin}${window.location.pathname}`
+      `${window.location.origin}${window.location.pathname}`,
     );
   }
 
@@ -22,24 +22,16 @@
     : {
         steps: [
           {
-            type: "move",
-            value: 200,
-          },
-          {
-            type: "rotate",
-            value: 90,
-          },
-          {
-            type: "move",
-            value: -20,
-          },
-          {
             type: "repeat",
             times: 80,
             steps: [
               {
                 type: "draw",
-                value: 18,
+                value: 16,
+                brush: {
+                  color: "#000000",
+                  width: 2,
+                },
               },
               {
                 type: "rotate",
@@ -62,14 +54,14 @@
   function calculateBoundries(
     currentState: DrawingState,
     steps: Array<Step>,
-    time: number
+    time: number,
   ) {
     steps.forEach((step: Step) => {
       currentState = stepExecutors.get(step.type)(
         step,
         currentState,
         code.functions,
-        time
+        time,
       );
     });
     return currentState;
@@ -154,7 +146,7 @@
       },
       code.steps,
       code.functions,
-      eased
+      eased,
     );
   }
 

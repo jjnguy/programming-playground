@@ -15,7 +15,7 @@
     if (stepType == "repeat") {
       step = {
         type: "repeat",
-        times: 1,
+        times: 2,
         steps: [],
       };
     } else if (stepType == "function") {
@@ -29,26 +29,15 @@
         value: "text",
         fontSize: 10,
       };
-    } else if (stepType == "draw") {
-      step = {
-        type: "draw",
-        value: 0,
-        color: "000000",
-      };
-    } else if (stepType == "move") {
-      step = {
-        type: "move",
-        value: 0,
-      };
     } else if (stepType == "rotate") {
       step = {
         type: "rotate",
-        value: 0,
+        value: 45,
       };
-    } else if (stepType == "draw_2.0") {
+    } else if (stepType == "draw") {
       step = {
-        type: "draw_2.0",
-        value: 0,
+        type: "draw",
+        value: 20,
       };
     } else {
       throw new Error("unknown step type");
@@ -62,10 +51,8 @@
 
 {#if showStepChoices}
   <div>
-    <button on:click={() => insertStep("move")}>move</button>
     <button on:click={() => insertStep("rotate")}>rotate</button>
     <button on:click={() => insertStep("draw")}>draw</button>
-    <button on:click={() => insertStep("draw_2.0")}>draw2</button>
     <button on:click={() => insertStep("text")}>text</button>
     <button on:click={() => insertStep("repeat")}>repeat</button>
     <button on:click={() => insertStep("function")}>function</button>

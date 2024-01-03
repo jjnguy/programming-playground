@@ -3,6 +3,7 @@
   import type { Step, StepFunction } from "../types";
   import CodeBuilder from "./CodeBuilder.svelte";
   import NumbericInput from "./NumbericInput.svelte";
+  import DrawStepBuilder from "./DrawStepBuilder.svelte";
 
   let dispatch = createEventDispatcher();
 
@@ -19,15 +20,14 @@
   <input bind:value={step.value} />
   <NumbericInput bind:value={step.fontSize} />
 {:else if step.type == "draw"}
-  <NumbericInput bind:value={step.value} step={0.5} />
-  <input type="color" bind:value={step.color} />
+  <DrawStepBuilder bind:step />
 {:else if step.type == "function"}
   <select bind:value={step.function}>
     {#each functions as func}
       <option>{func.name}</option>
     {/each}
   </select>
-{:else if step.type != "repeat"}
+{:else if step.type == "rotate"}
   <NumbericInput bind:value={step.value} step={0.5} />
 {:else if step.type == "repeat"}
   <NumbericInput bind:value={step.times} min={1} />
