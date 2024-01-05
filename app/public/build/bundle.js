@@ -67,6 +67,13 @@ var app = (function () {
             return fn.call(this, event);
         };
     }
+    function stop_propagation(fn) {
+        return function (event) {
+            event.stopPropagation();
+            // @ts-ignore
+            return fn.call(this, event);
+        };
+    }
     function attr(node, attribute, value) {
         if (value == null)
             node.removeAttribute(attribute);
@@ -1865,21 +1872,19 @@ var app = (function () {
 
     function get_each_context$2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[15] = list[i];
+    	child_ctx[16] = list[i];
     	return child_ctx;
     }
 
-    // (39:0) {:else}
+    // (47:2) {:else}
     function create_else_block(ctx) {
-    	let div;
+    	let div1;
+    	let div0;
     	let t0_value = /*step*/ ctx[0].type + "";
     	let t0;
     	let t1;
-    	let button;
-    	let t3;
     	let current_block_type_index;
     	let if_block;
-    	let if_block_anchor;
     	let current;
     	let mounted;
     	let dispose;
@@ -1909,35 +1914,34 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
-    			div = element("div");
+    			div1 = element("div");
+    			div0 = element("div");
     			t0 = text(t0_value);
     			t1 = space();
-    			button = element("button");
-    			button.textContent = "edit";
-    			t3 = space();
     			if (if_block) if_block.c();
-    			if_block_anchor = empty();
-    			attr_dev(button, "class", "small svelte-umj22u");
-    			add_location(button, file$2, 41, 4, 1338);
-    			attr_dev(div, "class", "step-name svelte-umj22u");
-    			add_location(div, file$2, 39, 2, 1292);
+    			attr_dev(div0, "class", "step-name svelte-h3ueb2");
+    			add_location(div0, file$2, 52, 6, 1703);
+    			attr_dev(div1, "class", "step-contents svelte-h3ueb2");
+    			add_location(div1, file$2, 47, 4, 1552);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div, anchor);
-    			append_dev(div, t0);
-    			append_dev(div, t1);
-    			append_dev(div, button);
-    			insert_dev(target, t3, anchor);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			append_dev(div0, t0);
+    			append_dev(div1, t1);
 
     			if (~current_block_type_index) {
-    				if_blocks[current_block_type_index].m(target, anchor);
+    				if_blocks[current_block_type_index].m(div1, null);
     			}
 
-    			insert_dev(target, if_block_anchor, anchor);
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler_1*/ ctx[12], false, false, false, false);
+    				dispose = [
+    					listen_dev(div1, "click", stop_propagation(/*click_handler_1*/ ctx[13]), false, false, true, false),
+    					listen_dev(div1, "keypress", /*keypress_handler*/ ctx[14], false, false, false, false)
+    				];
+
     				mounted = true;
     			}
     		},
@@ -1972,7 +1976,7 @@ var app = (function () {
     					}
 
     					transition_in(if_block, 1);
-    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    					if_block.m(div1, null);
     				} else {
     					if_block = null;
     				}
@@ -1988,16 +1992,14 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div);
-    			if (detaching) detach_dev(t3);
+    			if (detaching) detach_dev(div1);
 
     			if (~current_block_type_index) {
-    				if_blocks[current_block_type_index].d(detaching);
+    				if_blocks[current_block_type_index].d();
     			}
 
-    			if (detaching) detach_dev(if_block_anchor);
     			mounted = false;
-    			dispose();
+    			run_all(dispose);
     		}
     	};
 
@@ -2005,25 +2007,27 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(39:0) {:else}",
+    		source: "(47:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (14:0) {#if editMode}
+    // (15:2) {#if editMode}
     function create_if_block$2(ctx) {
-    	let div;
+    	let div1;
+    	let div0;
     	let t0_value = /*step*/ ctx[0].type + "";
     	let t0;
     	let t1;
+    	let span;
     	let button0;
     	let t3;
+    	let button1;
+    	let t5;
     	let current_block_type_index;
     	let if_block;
-    	let t4;
-    	let button1;
     	let current;
     	let mounted;
     	let dispose;
@@ -2053,41 +2057,49 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
-    			div = element("div");
+    			div1 = element("div");
+    			div0 = element("div");
     			t0 = text(t0_value);
     			t1 = space();
+    			span = element("span");
     			button0 = element("button");
     			button0.textContent = "done";
     			t3 = space();
-    			if (if_block) if_block.c();
-    			t4 = space();
     			button1 = element("button");
     			button1.textContent = "delete";
-    			attr_dev(button0, "class", "small svelte-umj22u");
-    			add_location(button0, file$2, 16, 4, 466);
-    			attr_dev(div, "class", "step-name svelte-umj22u");
-    			add_location(div, file$2, 14, 2, 420);
-    			attr_dev(button1, "class", "svelte-umj22u");
-    			add_location(button1, file$2, 37, 2, 1229);
+    			t5 = space();
+    			if (if_block) if_block.c();
+    			attr_dev(button0, "class", "small svelte-h3ueb2");
+    			add_location(button0, file$2, 19, 10, 551);
+    			attr_dev(button1, "class", "svelte-h3ueb2");
+    			add_location(button1, file$2, 23, 10, 688);
+    			attr_dev(span, "class", "svelte-h3ueb2");
+    			add_location(span, file$2, 18, 8, 533);
+    			attr_dev(div0, "class", "step-name svelte-h3ueb2");
+    			add_location(div0, file$2, 16, 6, 479);
+    			attr_dev(div1, "class", "step-contents svelte-h3ueb2");
+    			add_location(div1, file$2, 15, 4, 444);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div, anchor);
-    			append_dev(div, t0);
-    			append_dev(div, t1);
-    			append_dev(div, button0);
-    			insert_dev(target, t3, anchor);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			append_dev(div0, t0);
+    			append_dev(div0, t1);
+    			append_dev(div0, span);
+    			append_dev(span, button0);
+    			append_dev(span, t3);
+    			append_dev(span, button1);
+    			append_dev(div1, t5);
 
     			if (~current_block_type_index) {
-    				if_blocks[current_block_type_index].m(target, anchor);
+    				if_blocks[current_block_type_index].m(div1, null);
     			}
 
-    			insert_dev(target, t4, anchor);
-    			insert_dev(target, button1, anchor);
     			current = true;
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(button0, "click", /*click_handler*/ ctx[4], false, false, false, false),
+    					listen_dev(button0, "click", stop_propagation(/*click_handler*/ ctx[4]), false, false, true, false),
     					listen_dev(button1, "click", /*requestDeletion*/ ctx[3], false, false, false, false)
     				];
 
@@ -2125,7 +2137,7 @@ var app = (function () {
     					}
 
     					transition_in(if_block, 1);
-    					if_block.m(t4.parentNode, t4);
+    					if_block.m(div1, null);
     				} else {
     					if_block = null;
     				}
@@ -2141,15 +2153,12 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div);
-    			if (detaching) detach_dev(t3);
+    			if (detaching) detach_dev(div1);
 
     			if (~current_block_type_index) {
-    				if_blocks[current_block_type_index].d(detaching);
+    				if_blocks[current_block_type_index].d();
     			}
 
-    			if (detaching) detach_dev(t4);
-    			if (detaching) detach_dev(button1);
     			mounted = false;
     			run_all(dispose);
     		}
@@ -2159,14 +2168,14 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(14:0) {#if editMode}",
+    		source: "(15:2) {#if editMode}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (52:34) 
+    // (64:38) 
     function create_if_block_10(ctx) {
     	let span;
     	let t0_value = /*step*/ ctx[0].times + "";
@@ -2182,7 +2191,7 @@ var app = (function () {
     	let current;
 
     	function codebuilder_steps_binding_1(value) {
-    		/*codebuilder_steps_binding_1*/ ctx[13](value);
+    		/*codebuilder_steps_binding_1*/ ctx[12](value);
     	}
 
     	let codebuilder_props = {
@@ -2207,9 +2216,10 @@ var app = (function () {
     			t4 = space();
     			div = element("div");
     			create_component(codebuilder.$$.fragment);
-    			add_location(span, file$2, 52, 4, 1765);
-    			attr_dev(div, "class", "steps-container svelte-umj22u");
-    			add_location(div, file$2, 53, 4, 1824);
+    			attr_dev(span, "class", "svelte-h3ueb2");
+    			add_location(span, file$2, 64, 8, 2148);
+    			attr_dev(div, "class", "steps-container svelte-h3ueb2");
+    			add_location(div, file$2, 65, 8, 2211);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -2258,14 +2268,14 @@ var app = (function () {
     		block,
     		id: create_if_block_10.name,
     		type: "if",
-    		source: "(52:34) ",
+    		source: "(64:38) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (50:34) 
+    // (62:38) 
     function create_if_block_9(ctx) {
     	let span;
     	let t0_value = /*step*/ ctx[0].value + "";
@@ -2277,7 +2287,8 @@ var app = (function () {
     			span = element("span");
     			t0 = text(t0_value);
     			t1 = text("°");
-    			add_location(span, file$2, 50, 4, 1697);
+    			attr_dev(span, "class", "svelte-h3ueb2");
+    			add_location(span, file$2, 62, 8, 2072);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -2298,14 +2309,14 @@ var app = (function () {
     		block,
     		id: create_if_block_9.name,
     		type: "if",
-    		source: "(50:34) ",
+    		source: "(62:38) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (48:36) 
+    // (60:40) 
     function create_if_block_8(ctx) {
     	let span;
     	let t0;
@@ -2319,7 +2330,8 @@ var app = (function () {
     			t0 = text("execute `");
     			t1 = text(t1_value);
     			t2 = text("`");
-    			add_location(span, file$2, 48, 4, 1617);
+    			attr_dev(span, "class", "svelte-h3ueb2");
+    			add_location(span, file$2, 60, 8, 1984);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -2341,14 +2353,14 @@ var app = (function () {
     		block,
     		id: create_if_block_8.name,
     		type: "if",
-    		source: "(48:36) ",
+    		source: "(60:40) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (46:32) 
+    // (58:36) 
     function create_if_block_7(ctx) {
     	let span;
     	let t0_value = /*step*/ ctx[0].value + "";
@@ -2360,7 +2372,8 @@ var app = (function () {
     			span = element("span");
     			t0 = text(t0_value);
     			t1 = text("px");
-    			add_location(span, file$2, 46, 4, 1546);
+    			attr_dev(span, "class", "svelte-h3ueb2");
+    			add_location(span, file$2, 58, 8, 1905);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -2381,14 +2394,14 @@ var app = (function () {
     		block,
     		id: create_if_block_7.name,
     		type: "if",
-    		source: "(46:32) ",
+    		source: "(58:36) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (44:2) {#if step.type == "text"}
+    // (56:6) {#if step.type == "text"}
     function create_if_block_6(ctx) {
     	let span;
     	let t0;
@@ -2407,7 +2420,8 @@ var app = (function () {
     			t2 = text("\" @ ");
     			t3 = text(t3_value);
     			t4 = text("px");
-    			add_location(span, file$2, 44, 4, 1453);
+    			attr_dev(span, "class", "svelte-h3ueb2");
+    			add_location(span, file$2, 56, 8, 1804);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -2432,14 +2446,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6.name,
     		type: "if",
-    		source: "(44:2) {#if step.type == \\\"text\\\"}",
+    		source: "(56:6) {#if step.type == \\\"text\\\"}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (32:34) 
+    // (40:38) 
     function create_if_block_5(ctx) {
     	let numbericinput;
     	let updating_value;
@@ -2488,8 +2502,8 @@ var app = (function () {
     			t = space();
     			div = element("div");
     			create_component(codebuilder.$$.fragment);
-    			attr_dev(div, "class", "steps-container svelte-umj22u");
-    			add_location(div, file$2, 33, 4, 1105);
+    			attr_dev(div, "class", "steps-container svelte-h3ueb2");
+    			add_location(div, file$2, 41, 8, 1391);
     		},
     		m: function mount(target, anchor) {
     			mount_component(numbericinput, target, anchor);
@@ -2543,14 +2557,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(32:34) ",
+    		source: "(40:38) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (30:34) 
+    // (38:38) 
     function create_if_block_4(ctx) {
     	let numbericinput;
     	let updating_value;
@@ -2610,14 +2624,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(30:34) ",
+    		source: "(38:38) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (24:36) 
+    // (32:40) 
     function create_if_block_3(ctx) {
     	let select;
     	let mounted;
@@ -2638,9 +2652,9 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(select, "class", "svelte-umj22u");
+    			attr_dev(select, "class", "svelte-h3ueb2");
     			if (/*step*/ ctx[0].function === void 0) add_render_callback(() => /*select_change_handler*/ ctx[8].call(select));
-    			add_location(select, file$2, 24, 4, 778);
+    			add_location(select, file$2, 32, 8, 1028);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, select, anchor);
@@ -2701,14 +2715,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(24:36) ",
+    		source: "(32:40) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (22:32) 
+    // (30:36) 
     function create_if_block_2$1(ctx) {
     	let drawstepbuilder;
     	let updating_step;
@@ -2768,14 +2782,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2$1.name,
     		type: "if",
-    		source: "(22:32) ",
+    		source: "(30:36) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (19:2) {#if step.type == "text"}
+    // (27:6) {#if step.type == "text"}
     function create_if_block_1$1(ctx) {
     	let input;
     	let t;
@@ -2807,8 +2821,8 @@ var app = (function () {
     			input = element("input");
     			t = space();
     			create_component(numbericinput.$$.fragment);
-    			attr_dev(input, "class", "svelte-umj22u");
-    			add_location(input, file$2, 19, 4, 582);
+    			attr_dev(input, "class", "svelte-h3ueb2");
+    			add_location(input, file$2, 27, 8, 812);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, input, anchor);
@@ -2859,17 +2873,17 @@ var app = (function () {
     		block,
     		id: create_if_block_1$1.name,
     		type: "if",
-    		source: "(19:2) {#if step.type == \\\"text\\\"}",
+    		source: "(27:6) {#if step.type == \\\"text\\\"}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (26:6) {#each functions as func}
+    // (34:10) {#each functions as func}
     function create_each_block$2(ctx) {
     	let option;
-    	let t_value = /*func*/ ctx[15].name + "";
+    	let t_value = /*func*/ ctx[16].name + "";
     	let t;
     	let option_value_value;
 
@@ -2877,18 +2891,19 @@ var app = (function () {
     		c: function create() {
     			option = element("option");
     			t = text(t_value);
-    			option.__value = option_value_value = /*func*/ ctx[15].name;
+    			option.__value = option_value_value = /*func*/ ctx[16].name;
     			option.value = option.__value;
-    			add_location(option, file$2, 26, 8, 856);
+    			attr_dev(option, "class", "svelte-h3ueb2");
+    			add_location(option, file$2, 34, 12, 1114);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
     			append_dev(option, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*functions*/ 2 && t_value !== (t_value = /*func*/ ctx[15].name + "")) set_data_dev(t, t_value);
+    			if (dirty & /*functions*/ 2 && t_value !== (t_value = /*func*/ ctx[16].name + "")) set_data_dev(t, t_value);
 
-    			if (dirty & /*functions*/ 2 && option_value_value !== (option_value_value = /*func*/ ctx[15].name)) {
+    			if (dirty & /*functions*/ 2 && option_value_value !== (option_value_value = /*func*/ ctx[16].name)) {
     				prop_dev(option, "__value", option_value_value);
     				option.value = option.__value;
     			}
@@ -2902,7 +2917,7 @@ var app = (function () {
     		block,
     		id: create_each_block$2.name,
     		type: "each",
-    		source: "(26:6) {#each functions as func}",
+    		source: "(34:10) {#each functions as func}",
     		ctx
     	});
 
@@ -2910,9 +2925,9 @@ var app = (function () {
     }
 
     function create_fragment$2(ctx) {
+    	let div;
     	let current_block_type_index;
     	let if_block;
-    	let if_block_anchor;
     	let current;
     	const if_block_creators = [create_if_block$2, create_else_block];
     	const if_blocks = [];
@@ -2927,15 +2942,17 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
+    			div = element("div");
     			if_block.c();
-    			if_block_anchor = empty();
+    			attr_dev(div, "class", "step svelte-h3ueb2");
+    			add_location(div, file$2, 13, 0, 402);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			if_blocks[current_block_type_index].m(target, anchor);
-    			insert_dev(target, if_block_anchor, anchor);
+    			insert_dev(target, div, anchor);
+    			if_blocks[current_block_type_index].m(div, null);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
@@ -2962,7 +2979,7 @@ var app = (function () {
     				}
 
     				transition_in(if_block, 1);
-    				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				if_block.m(div, null);
     			}
     		},
     		i: function intro(local) {
@@ -2975,8 +2992,8 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if_blocks[current_block_type_index].d(detaching);
-    			if (detaching) detach_dev(if_block_anchor);
+    			if (detaching) detach_dev(div);
+    			if_blocks[current_block_type_index].d();
     		}
     	};
 
@@ -3066,14 +3083,15 @@ var app = (function () {
     		}
     	}
 
-    	const click_handler_1 = () => $$invalidate(2, editMode = true);
-
     	function codebuilder_steps_binding_1(value) {
     		if ($$self.$$.not_equal(step.steps, value)) {
     			step.steps = value;
     			$$invalidate(0, step);
     		}
     	}
+
+    	const click_handler_1 = () => $$invalidate(2, editMode = true);
+    	const keypress_handler = () => $$invalidate(2, editMode = true);
 
     	$$self.$$set = $$props => {
     		if ('step' in $$props) $$invalidate(0, step = $$props.step);
@@ -3116,8 +3134,9 @@ var app = (function () {
     		numbericinput_value_binding_1,
     		numbericinput_value_binding_2,
     		codebuilder_steps_binding,
+    		codebuilder_steps_binding_1,
     		click_handler_1,
-    		codebuilder_steps_binding_1
+    		keypress_handler
     	];
     }
 
@@ -3873,7 +3892,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (132:6) {#each code.functions as func}
+    // (133:8) {#each code.functions as func}
     function create_each_block(ctx) {
     	let option;
     	let t_value = /*func*/ ctx[23].name + "";
@@ -3886,7 +3905,7 @@ var app = (function () {
     			t = text(t_value);
     			option.__value = option_value_value = /*func*/ ctx[23];
     			option.value = option.__value;
-    			add_location(option, file, 132, 8, 4046);
+    			add_location(option, file, 133, 10, 4110);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -3909,14 +3928,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(132:6) {#each code.functions as func}",
+    		source: "(133:8) {#each code.functions as func}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (136:4) {#if selectedFunction}
+    // (137:6) {#if selectedFunction}
     function create_if_block(ctx) {
     	let codebuilder;
     	let updating_steps;
@@ -3976,7 +3995,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(136:4) {#if selectedFunction}",
+    		source: "(137:6) {#if selectedFunction}",
     		ctx
     	});
 
@@ -3987,6 +4006,7 @@ var app = (function () {
     	let main;
     	let canvas_1;
     	let t0;
+    	let div;
     	let section0;
     	let button0;
     	let t2;
@@ -4044,6 +4064,7 @@ var app = (function () {
     			main = element("main");
     			canvas_1 = element("canvas");
     			t0 = space();
+    			div = element("div");
     			section0 = element("section");
     			button0 = element("button");
     			button0.textContent = "play/pause";
@@ -4077,27 +4098,26 @@ var app = (function () {
     			button2 = element("button");
     			button2.textContent = "create";
     			attr_dev(canvas_1, "id", "canvas");
-    			attr_dev(canvas_1, "class", "svelte-7nqdiw");
+    			attr_dev(canvas_1, "class", "svelte-1q9dwc6");
     			add_location(canvas_1, file, 113, 2, 3498);
-    			add_location(button0, file, 115, 4, 3558);
-    			add_location(button1, file, 116, 4, 3623);
-    			attr_dev(section0, "class", "svelte-7nqdiw");
-    			add_location(section0, file, 114, 2, 3543);
+    			add_location(button0, file, 116, 6, 3588);
+    			add_location(button1, file, 117, 6, 3655);
+    			add_location(section0, file, 115, 4, 3571);
     			attr_dev(input0, "type", "checkbox");
-    			add_location(input0, file, 120, 19, 3724);
-    			add_location(label, file, 119, 4, 3697);
-    			attr_dev(section1, "class", "svelte-7nqdiw");
-    			add_location(section1, file, 118, 2, 3682);
-    			add_location(h2, file, 129, 4, 3936);
+    			add_location(input0, file, 121, 21, 3764);
+    			add_location(label, file, 120, 6, 3735);
+    			add_location(section1, file, 119, 4, 3718);
+    			add_location(h2, file, 130, 6, 3994);
     			if (/*selectedFunction*/ ctx[4] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[12].call(select));
-    			add_location(select, file, 130, 4, 3960);
-    			add_location(input1, file, 143, 6, 4351);
+    			add_location(select, file, 131, 6, 4020);
+    			add_location(input1, file, 144, 8, 4437);
     			attr_dev(button2, "type", "submit");
-    			add_location(button2, file, 144, 6, 4397);
-    			add_location(form, file, 142, 4, 4298);
-    			attr_dev(section2, "class", "svelte-7nqdiw");
-    			add_location(section2, file, 128, 2, 3921);
-    			attr_dev(main, "class", "svelte-7nqdiw");
+    			add_location(button2, file, 145, 8, 4485);
+    			add_location(form, file, 143, 6, 4382);
+    			add_location(section2, file, 129, 4, 3977);
+    			attr_dev(div, "class", "controls svelte-1q9dwc6");
+    			add_location(div, file, 114, 2, 3543);
+    			attr_dev(main, "class", "svelte-1q9dwc6");
     			add_location(main, file, 112, 0, 3488);
     		},
     		l: function claim(nodes) {
@@ -4108,20 +4128,21 @@ var app = (function () {
     			append_dev(main, canvas_1);
     			/*canvas_1_binding*/ ctx[8](canvas_1);
     			append_dev(main, t0);
-    			append_dev(main, section0);
+    			append_dev(main, div);
+    			append_dev(div, section0);
     			append_dev(section0, button0);
     			append_dev(section0, t2);
     			append_dev(section0, button1);
-    			append_dev(main, t4);
-    			append_dev(main, section1);
+    			append_dev(div, t4);
+    			append_dev(div, section1);
     			append_dev(section1, label);
     			append_dev(label, t5);
     			append_dev(label, input0);
     			input0.checked = /*autoCenter*/ ctx[2];
     			append_dev(section1, t6);
     			mount_component(codebuilder, section1, null);
-    			append_dev(main, t7);
-    			append_dev(main, section2);
+    			append_dev(div, t7);
+    			append_dev(div, section2);
     			append_dev(section2, h2);
     			append_dev(section2, t9);
     			append_dev(section2, select);

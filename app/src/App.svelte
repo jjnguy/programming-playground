@@ -160,39 +160,41 @@
 
 <main>
   <canvas bind:this={canvas} id="canvas" />
-  <section>
-    <button on:click={() => (play = !play)}>play/pause</button>
-    <button on:click={copyLink}>link</button>
-  </section>
-  <section>
-    <label
-      >Auto Center <input type="checkbox" bind:checked={autoCenter} /></label
-    >
-    <CodeBuilder
-      bind:steps={code.steps}
-      functions={code.functions}
-      editMode={true}
-    />
-  </section>
-  <section>
-    <h2>functions</h2>
-    <select bind:value={selectedFunction}>
-      {#each code.functions as func}
-        <option value={func}>{func.name}</option>
-      {/each}
-    </select>
-    {#if selectedFunction}
+  <div class="controls">
+    <section>
+      <button on:click={() => (play = !play)}>play/pause</button>
+      <button on:click={copyLink}>link</button>
+    </section>
+    <section>
+      <label
+        >Auto Center <input type="checkbox" bind:checked={autoCenter} /></label
+      >
       <CodeBuilder
-        bind:steps={selectedFunction.steps}
+        bind:steps={code.steps}
         functions={code.functions}
         editMode={true}
       />
-    {/if}
-    <form on:submit|preventDefault={addFunction}>
-      <input bind:value={newFunctionName} />
-      <button type="submit">create</button>
-    </form>
-  </section>
+    </section>
+    <section>
+      <h2>functions</h2>
+      <select bind:value={selectedFunction}>
+        {#each code.functions as func}
+          <option value={func}>{func.name}</option>
+        {/each}
+      </select>
+      {#if selectedFunction}
+        <CodeBuilder
+          bind:steps={selectedFunction.steps}
+          functions={code.functions}
+          editMode={true}
+        />
+      {/if}
+      <form on:submit|preventDefault={addFunction}>
+        <input bind:value={newFunctionName} />
+        <button type="submit">create</button>
+      </form>
+    </section>
+  </div>
 </main>
 
 <style lang="less">
@@ -205,8 +207,8 @@
       height: 100vw;
     }
 
-    section:last-child {
-      z-index: 0;
+    .controls {
+      overflow: auto;
     }
   }
 </style>
