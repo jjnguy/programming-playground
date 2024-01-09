@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Fa from "svelte-fa";
+  import { faCheck, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
   import { createEventDispatcher } from "svelte";
   import type { Step, StepFunction } from "../types";
   import CodeBuilder from "./CodeBuilder.svelte";
@@ -24,10 +26,10 @@
         {step.type}
         <span>
           <button
-            class="small"
-            on:click|stopPropagation={() => (editMode = false)}>done</button
+            class="plain"
+            on:click|stopPropagation={() => (editMode = false)}
+            ><Fa icon={faCheck} /></button
           >
-          <button on:click={requestDeletion}>delete</button>
         </span>
       </div>
       {#if step.type == "text"}
@@ -49,15 +51,21 @@
           <CodeBuilder bind:steps={step.steps} {functions} {editMode} />
         </div>
       {/if}
+      <button class="plain" on:click={requestDeletion}
+        ><Fa icon={faTrash} color="red" /></button
+      >
     </div>
   {:else}
-    <div
-      class="step-contents"
-      on:click|stopPropagation={() => (editMode = true)}
-      on:keypress={() => (editMode = true)}
-    >
+    <div class="step-contents">
       <div class="step-name">
         {step.type}
+        <button
+          class="plain"
+          on:click|stopPropagation={() => (editMode = true)}
+          on:keypress={() => (editMode = true)}
+        >
+          <Fa icon={faEdit} />
+        </button>
       </div>
       {#if step.type == "text"}
         <span>"{step.value}" @ {step.fontSize ?? 10}px</span>
@@ -121,5 +129,12 @@
   button {
     padding: 0.7rem 1rem;
     margin-right: 0.4rem;
+
+    &.plain {
+      border: none;
+      background-color: transparent;
+      padding: 0.2rem 0.2rem;
+      cursor: pointer;
+    }
   }
 </style>
